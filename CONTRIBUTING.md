@@ -52,7 +52,7 @@ git push
 ```
 4. Once ready, create a pull request.
 
-   \**Remember to switch to the correct repository and not the parent fork!*
+   \**Remember to switch to the correct base repository. Don't create a PR in the parent repository!*
 5. At least one other team member (not the owner of the changes) will review changes and make any necessary comments.
 6. Anyone can merge commit!
 ```
