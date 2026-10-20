@@ -6,6 +6,8 @@ Ever walk into a building and find yourself met with a wall of flyers? It's mess
 
 # Product Vision
 
+TODO
+
 # Core Team
 
 1. Andrew Nunez (aan9558) | [Link to GitHub](https://github.com/aan9558-star)
