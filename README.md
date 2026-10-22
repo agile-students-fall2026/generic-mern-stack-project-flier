@@ -6,7 +6,7 @@ Ever walk into a building and find yourself met with a wall of flyers? It's mess
 
 # Product Vision
 
-TODO
+For NYU students and student organizations, Flier is a web application that makes discovering and promoting campus events easier, more accessible, and more equitable. Unlike NYU Engage and traditional paper flyers, Flier provides a simple centralized platform where organizations can share events and students can discover, save, follow, and plan for events that fit their interests and schedules.
 
 # Core Team
 
