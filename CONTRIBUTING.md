@@ -77,7 +77,13 @@ A **ruleset** has been created to protect the *master* branch. The following out
 
 # Rules of Contribution
 
-TODO
+1. Create an issue before starting a major feature or task.
+2. Keep each branch focused on one feature or task.
+3. Test your changes before creating a pull request.
+4. Write clear pull request descriptions.
+5. Address reviewer feedback before merging.
+6. Do not commit passwords, API keys, or other private information.
+7. Ask the team for help if you are stuck or need clarification.
 
 # Local Development Configuration
 
