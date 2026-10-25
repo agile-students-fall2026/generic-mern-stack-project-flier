@@ -21,7 +21,7 @@ Sign Up and Login sit side by side as both lead into the Main Feed. From the fee
 Add Flier is the only branch with its own children. Posting a flyer continues to an upload form (image, date, time, and room), then to a flier detail screen (image, info, and a Save button).
 
 <p align="center">
-  <img src="ux-design/FlierAppMap.png" alt="App map. Sign Up and Login both lead to the Main Feed, which branches to Organization List, Calendar View, Add Flier, Map View, and Profile. Add Flier continues to an upload form and then a flier detail screen." width="880">
+  <img src="ux-design/AppMap.png" alt="App map. Sign Up and Login both lead to the Main Feed, which branches to Organization List, Calendar View, Add Flier, Map View, and Profile. Add Flier continues to an upload form and then a flier detail screen." width="880">
 </p>
 
 ## Signed-in Navigation
@@ -84,11 +84,23 @@ The home screen after sign-in. It is a stack of sideways-scrolling flyer rows. E
 
 A scrollable directory of clubs. The list icon in the bottom bar is the selected tab. Rows continue below the fold.
 
-- Each row is one club: logo, club name, and a short line of club details.
+- Each row is one club card that includes: logo, club name, and a short line of club details.
 - The search icon filters the directory by club name.
+- Clicking on a club's card will open the club's page.
 
 <p align="center">
   <img src="ux-design/OrganizationList.png" alt="Organization List wireframe with a search icon and repeating club rows that show a logo, club name, and club details." width="320">
+</p>
+
+## Club Details
+
+A page containing information and contact information for a club.
+
+- Users can request administrator access to the club (to manage and post new flyers/events).
+- Users can add clubs to their personal list, which will affect their notifications & feed.
+
+<p align="center">
+  <img src="ux-design/ClubDetails.png" alt="Club Details wireframe containing a club's information and user options." width="320">
 </p>
 
 ## Calendar View
@@ -103,17 +115,44 @@ A month calendar for finding events by date. The calendar icon in the bottom bar
   <img src="ux-design/CalendarView.png" alt="Calendar wireframe for October 2026 with the 19th circled and a Today's Events row of flyer cards underneath." width="320">
 </p>
 
-## Add Flier
+## Add Flier (Non-Organization Affliate)
+
+If a user isn't an admin of any organization, they will see a redirect screen containing the following options:
+
+- Find an Organization, which will allow them to request admin access.
+- Back to Main Feed, which will allow them to continue browsing events/flyers.
+
+<p align="center">
+  <img src="ux-design/AddFlyerNonOrg.png" alt="Add Flier wireframe with a large image placeholder and the label Add Flier." width="320">
+</p>
+
+## Add Flier (Organization Admin)
 
 Where a club starts a new flyer. The plus icon in the bottom bar is the selected tab. The large crossed box is the image placeholder, and **Add Flier!** begins the post.
 
 The app map continues this screen in two steps that are not drawn as their own wireframes:
 
-1. **Upload form.** The club attaches the flyer image and enters the date, time, and room.
-2. **Flier detail.** The club reviews the image and the event info, then taps **Save**.
+- Upload form. The club attaches the flyer image and enters the date, time, and room.
+- Flier detail. The club reviews the image and the event info, then taps Save.
 
 <p align="center">
-  <img src="ux-design/NewFlyer.png" alt="Add Flier wireframe with a large image placeholder and the label Add Flier." width="320">
+  <img src="ux-design/AddFlyerOrg.png" alt="Add Flier wireframe with a large image placeholder and the label Add Flier." width="320">
+</p>
+
+## Flyer Detail
+
+Users can click on any flyer that is shown in their feed or any relevant page that displays a flyer. There will be an expanded view of the flyer. Admins also can see the "Edit Flyer" button from here.
+
+<p align="center">
+  <img src="ux-design/FlyerDetail.png" alt="Add Flier wireframe with a large image placeholder and the label Add Flier." width="320">
+</p>
+
+## Edit Flyer (Organization Admin)
+
+Club admins have the option of editing a flyer once it has been posted. The form functions similarly to the "Add a Flyer" form.
+
+<p align="center">
+  <img src="ux-design/EditFlyer.png" alt="Add Flier wireframe with a large image placeholder and the label Add Flier." width="320">
 </p>
 
 ## Map View
