@@ -87,7 +87,65 @@ A **ruleset** has been created to protect the *master* branch. The following out
 
 # Local Development Configuration
 
-TODO
+## Prerequisites
+
+1. [Git](https://git-scm.com/)
+2. A code editor
+3. [Node.js](https://nodejs.org/) (current LTS) and npm, required once `front-end/package.json` and `back-end/package.json` exist
+
+## Clone the repository
+
+Work in the shared team repository. The default branch is `master`.
+
+```
+git clone https://github.com/agile-students-fall2026/Flier.git
+cd Flier
+```
+
+Set your local git username to your GitHub username. Leave the **Name** field blank on [your GitHub profile](https://github.com/settings/profile) so commits are attributed to that username.
+
+```
+git config --global user.name "your-github-username"
+```
+
+## Repository layout
+
+| Path | What it is |
+| --- | --- |
+| `front-end/` | React app (Vite). Placeholder until `package.json` is added. |
+| `back-end/` | Express server. Placeholder until `package.json` is added. |
+| `ux-design/` | App map, wireframes, and prototype. See [UX-DESIGN.md](UX-DESIGN.md). |
+| `ux-design/prototype/` | Exported prototype files. The Figma link is in `readme.txt`. |
+| `.env` | Local secrets for each app, once those apps need them. Listed in `.gitignore`. |
+| `.gitignore` | Ignores `node_modules/`, build output, coverage reports, and `.env`. |
+
+Keep passwords, API keys, and database URIs in `.env`. Each teammate runs `npm install` locally after dependencies are added. Do not commit `node_modules/` or `.env`.
+
+## Install and run
+
+**TBD. Not implemented yet.** `front-end/` and `back-end/` do not have a `package.json`, so there is nothing to install or start. When each app is added, the commands below will be filled in.
+
+### Front-end
+
+From `front-end/`, after `package.json` exists:
+
+```
+cd front-end
+npm install
+npm run dev
+```
+
+### Back-end
+
+From `back-end/`, after `package.json` exists:
+
+```
+cd back-end
+npm install
+npm start
+```
+
+Copy any required values into a local `.env` in that directory before starting the server. Do not commit that file.
 
 # Building & Testing
 
