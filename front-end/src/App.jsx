@@ -1,19 +1,32 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Landing from './pages/Landing';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Home from './pages/Home';
+import OrganizationView from './pages/OrganizationView';
+import CalendarView from './pages/CalendarView';
+import AddFlyer from './pages/AddFlyer';
+import MapView from './pages/MapView';
+import Profile from './pages/Profile';
+
 export default function App() {
   return (
-    <main className="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-6 space-y-4">
-      <h1 className="text-4xl font-extrabold text-cyan-400 tracking-tight">
-        Sprint 1: Mobile Web App
-      </h1>
-      <p className="text-slate-300 text-lg">
-        Tailwind is working. Ready to build mock screens!
-      </p>
-      <button 
-        type="button" 
-        className="px-5 py-2.5 bg-cyan-500 hover:bg-cyan-600 active:scale-95 text-slate-950 font-semibold rounded-lg shadow-md transition-all cursor-pointer"
-        onClick={() => alert('Dynamic click works!')}
-      >
-        Test Dynamic Button
-      </button>
-    </main>
-  );
+    <>
+      <BrowserRouter>
+        <div className="pages">
+          <Routes>
+            <Route path="/" element={<Landing/>}/>
+            <Route path="/login" element={<Login/>}/>
+            <Route path="/register" element={<Register/>}/>
+            <Route path="/home" element={<Home/>}/>
+            <Route path="/organizations" element={<OrganizationView/>}/>
+            <Route path="/calendar" element={<CalendarView/>}/>
+            <Route path="/add-flyer" element={<AddFlyer/>}/>
+            <Route path="/map" element={<MapView/>}/>
+            <Route path="/profile" element={<Profile/>}/>
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </>
+  )
 }
