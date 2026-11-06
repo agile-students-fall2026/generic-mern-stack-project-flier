@@ -38,6 +38,10 @@ export default function App() {
           <Route path="/add-flyer" element={<AddFlyer />} />
           <Route path="/map" element={<MapView />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/edit-profile" element={<EditProfile />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/support" element={<Support />} />
         </Route>
       </Routes>
       </FavoritesProvider>
