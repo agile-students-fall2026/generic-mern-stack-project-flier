@@ -1,14 +1,20 @@
+import { Link } from "react-router-dom";
+import arrowBack from "../assets/arrow-back-40px.svg";
+
 /**
- * Takes in two props: flyer and mode.
+ * Takes in two props: flyer mode, and onClick.
  * 
- * The flyer prop provides the specific flyer from the backend from which the following can be read:
- * - id, title, starts_at, location, image, and owner.
+ * The flyer prop provides the specific flyer from the backend which exposes the following to be read:
+ * - id, title, starts_at, location, image, owner, and description.
  * 
  * The mode prop provides the type of view the flyer should be rendered in.
  * - "carousel" means that only image should be rendered since it is appearing in a carousel (home/calendar).
  * - "full" means that we're looking at the flyer's full details. Provide every relevant piece of info.
+ * 
+ * The onClick prop provides a click handler for flyers in carousel mode.
+ * Clicking on flyers with the handler will redirect to the flyer's full details.
  */
-export default function Flyer({ flyer, mode }) {
+export default function Flyer({ flyer, mode, onClick }) {
   /* Format the date and time to be easily human readable */
   const formattedStart = new Intl.DateTimeFormat(undefined, {
     dateStyle: "medium",
@@ -18,12 +24,40 @@ export default function Flyer({ flyer, mode }) {
   /* Full Details Mode */
   if (mode === "full") {
     return (
-      <article>
-        <img src={flyer.image} alt={`A flyer uploaded by ${flyer.owner}`}/>
-        <h1>{flyer.title}</h1>
-        <h2>{formattedStart}</h2>
-        <p>{flyer.location}</p>
-        <p>{flyer.owner}</p>
+      <article className="bg-(--paper) mt-3 pb-18">
+        {/* Flyer Image & Overlay Elements */}
+        <div className="w-full h-[calc(100vh-16rem)] aspect-8.5/11 relative">
+          <img src={flyer.image} alt={`A flyer uploaded by ${flyer.owner}`} className="w-full h-full object-cover rounded-t-4xl shadow-[0px_-3px_8px_rgba(0,0,0,0.25)]"/>
+          {/* Back Arrow */}
+          <Link to="/home" aria-label="Back" className="absolute left-6 top-6 z-20">
+            <img src={arrowBack} alt="Back arrow to home" className="w-8 p-1 bg-(--soft-black) rounded-full"/>
+          </Link>
+
+          {/* Gradient overlay to enhance readability & contrast */}
+          <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black via-black/50 to-transparent"/>
+          
+          {/* Title & Club */}
+          <div className="absolute inset-x-0 bottom-0 z-10 p-8 text-(--paper)">
+            <h1 className="heading py-2 max-w-full wrap-break-word">{flyer.title}</h1>
+            <p className="feature-copy bg-(--nyu-indigo) w-fit h-full px-4 py-2">{flyer.owner}</p>
+          </div>
+        </div>
+
+        {/* Expanded Details */}
+        <dl className="bg-(--parchment) w-full p-8 text-(--soft-black) wrap-break-word flex flex-col gap-2">
+          <div>
+            <dt className="heading">Description</dt>
+            <dd className="feature-copy">{flyer.description}</dd>
+          </div>
+          <div>
+            <dt className="heading">Location</dt>
+            <dd className="feature-copy">{flyer.location}</dd>
+          </div>
+          <div>
+            <dt className="heading">Date & Time</dt>
+            <dd className="feature-copy">{formattedStart}</dd>
+          </div>
+        </dl>
       </article>
     )
   }
@@ -31,7 +65,10 @@ export default function Flyer({ flyer, mode }) {
   /* Carousel Mode */
   if (mode === "carousel") {
     return (
-      <img src={flyer.image} alt={`A flyer uploaded by ${flyer.owner}`}/>
+      /* A click sends users to the full flyer details. Fixed aspect ratio of 8.5x11. */
+      <Link to={`/flyer/${flyer.id}`} className="block w-52 aspect-8.5/11 shrink-0 overflow-hidden">
+        <img src={flyer.image} alt={`A flyer uploaded by ${flyer.owner}`} className="h-full w-full object-cover transition-transform duration-200 hover:scale-[1.03]"/>
+      </Link>
     )
   }
 };

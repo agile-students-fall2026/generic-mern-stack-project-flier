@@ -13,6 +13,7 @@ import CalendarView from './pages/CalendarView';
 import AddFlyer from './pages/AddFlyer';
 import EditFlyer from './pages/EditFlyer';
 import { FlyersProvider } from './context/FlyersContext';
+import FlyerDetails from './pages/FlyerDetails';
 import MapView from './pages/MapView';
 import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
@@ -40,6 +41,7 @@ export default function App() {
           <Route path="/calendar" element={<CalendarView />} />
           <Route path="/add-flyer" element={<AddFlyer />} />
           <Route path="/flyers/:flyerId/edit" element={<EditFlyer />} />
+          <Route path="/flyer/:flyerId" element={<FlyerDetails />} />
           <Route path="/map" element={<MapView />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/edit-profile" element={<EditProfile />} />
