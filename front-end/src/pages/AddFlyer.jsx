@@ -3,14 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import AddFlyerForm from "../components/AddFlyerForm";
 import { useFlyers } from "../context/FlyersContext";
 
-const primaryButton =
-  "body-copy flex h-12 w-full items-center justify-center rounded-xl border border-black/10 bg-white text-base font-semibold shadow-sm active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-(--nyu-indigo)";
+const primaryButton = "feature-copy flex h-fit w-full p-6 items-center justify-center rounded-xl border border-black/10 bg-white text-base font-semibold shadow-sm active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-(--nyu-indigo)";
 
 function NotAnAdmin() {
   return (
-    <div className="mt-10 flex flex-col">
+    <div className="flex flex-col">
       <h1 className="heading">Oops!</h1>
-      <p className="body-copy mt-2">
+      <p className="feature-copy mt-2">
         Looks like you aren&apos;t registered as an admin of an organization yet...
       </p>
       <div className="mt-8 flex flex-col gap-4">
@@ -37,8 +36,9 @@ export default function AddFlyer() {
   }
 
   return (
-    <div className="flex flex-1 flex-col bg-(--parchment)">
-      <div className="mx-auto flex w-full max-w-md justify-end px-5 pt-4">
+    <div className="flex flex-1 flex-col bg-(--parchment) rounded-t-4xl inset-shadow-sm shadow-[0px_-3px_8px_rgba(0,0,0,0.25)] mt-3 relative">
+      {/* TODO: Remove this once proper backend & role-based access control is working. */}
+      <div className="mx-auto flex w-full max-w-md justify-end absolute top-2 right-8">
         <button
           type="button"
           onClick={() => setIsAdmin((current) => !current)}
@@ -51,7 +51,7 @@ export default function AddFlyer() {
       {isAdmin ? (
         <AddFlyerForm heading="Add a Flyer" submitLabel="Post!" onSubmit={handlePost} />
       ) : (
-        <section className="flex flex-1 flex-col px-5 pb-8 text-(--soft-black)">
+        <section className="flex flex-1 flex-col p-8 text-(--soft-black) justify-center">
           <div className="mx-auto w-full max-w-md">
             <NotAnAdmin />
           </div>

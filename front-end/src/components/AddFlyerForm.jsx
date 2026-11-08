@@ -53,8 +53,8 @@ export default function AddFlyerForm({ heading, submitLabel, initialValues = emp
   }
 
   return (
-    <section className="flex flex-1 flex-col bg-(--parchment) px-5 pt-6 pb-8 text-(--soft-black)">
-      <div className="mx-auto flex w-full max-w-md flex-col">
+    <>
+      <div className="mx-auto flex w-full max-w-md flex-col p-8 pb-28">
         <div className="flex items-center justify-between gap-3">
           <h1 className="heading">{heading}</h1>
           <button
@@ -76,7 +76,7 @@ export default function AddFlyerForm({ heading, submitLabel, initialValues = emp
           </p>
         )}
 
-        <form onSubmit={handleSubmit} className="mt-5 flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="mt-5 flex flex-col gap-2">
           <div>
             <label
               className={`flex cursor-pointer flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed bg-white text-center shadow-sm focus-within:ring-2 focus-within:ring-(--nyu-indigo) ${
@@ -190,6 +190,6 @@ export default function AddFlyerForm({ heading, submitLabel, initialValues = emp
           </button>
         </form>
       </div>
-    </section>
+    </>
   );
 }

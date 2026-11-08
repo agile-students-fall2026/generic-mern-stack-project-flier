@@ -31,7 +31,7 @@ export default function EditFlyer() {
 
   if (!flyer) {
     return (
-      <section className="flex flex-1 flex-col bg-(--parchment) px-5 pt-8 pb-10 text-(--soft-black)">
+      <section className="flex flex-1 flex-col bg-(--parchment) p-8 pb-28 text-(--soft-black)">
         <div className="mx-auto flex w-full max-w-md flex-col gap-4">
           <p className="body-copy">This flyer is not available.</p>
           <Link to="/home" className="body-copy underline underline-offset-4">
