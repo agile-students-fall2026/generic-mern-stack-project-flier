@@ -5,7 +5,7 @@ import { useFavorites } from "../context/FavoritesContext";
 import arrowBack from "../assets/arrow-back-40px.svg";
 
 /**
- * Takes in two props: flyer mode, and onClick.
+ * Takes in two props: flyer and mode.
  * 
  * The flyer prop provides the specific flyer from the backend which exposes the following to be read:
  * - id, title, starts_at, location, image, owner, and description.
@@ -13,11 +13,8 @@ import arrowBack from "../assets/arrow-back-40px.svg";
  * The mode prop provides the type of view the flyer should be rendered in.
  * - "carousel" means that only image should be rendered since it is appearing in a carousel (home/calendar).
  * - "full" means that we're looking at the flyer's full details. Provide every relevant piece of info.
- * 
- * The onClick prop provides a click handler for flyers in carousel mode.
- * Clicking on flyers with the handler will redirect to the flyer's full details.
  */
-export default function Flyer({ flyer, mode, onClick }) {
+export default function Flyer({ flyer, mode }) {
   const navigate = useNavigate();
   const { isFavorite, toggleFavorite } = useFavorites();
   const favorite = isFavorite(flyer.id);
@@ -76,7 +73,7 @@ export default function Flyer({ flyer, mode, onClick }) {
           </div>
         </dl>
       </article>
-    )
+    );
   }
 
   /* Carousel Mode */
@@ -86,6 +83,6 @@ export default function Flyer({ flyer, mode, onClick }) {
       <Link to={`/flyer/${flyer.id}`} className="block w-52 aspect-8.5/11 shrink-0 overflow-hidden">
         <img src={flyer.image} alt={`A flyer uploaded by ${flyer.owner}`} className="h-full w-full object-cover transition-transform duration-200 hover:scale-[1.03]"/>
       </Link>
-    )
+    );
   }
 };

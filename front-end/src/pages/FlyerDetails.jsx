@@ -20,7 +20,7 @@ const mockData = {
     { id:"11", title:"Event 11", starts_at:"2026-11-04T12:00:00Z", location:"Kimmel Center", image:"https://picsum.photos/200/300", owner:"Club 1", description: "Join us for an event at Kimmel! Free food and merch provided."},
     { id:"12", title:"Event 12", starts_at:"2026-11-04T12:00:00Z", location:"Kimmel Center", image:"https://picsum.photos/200/300", owner:"Club 1", description: "Join us for an event at Kimmel! Free food and merch provided."},
   ],
-}
+};
 
 export default function FlyerDetails() {
   /* Grab the id from the URL params */
@@ -30,5 +30,5 @@ export default function FlyerDetails() {
 
   return (
     <Flyer key={flyerId} flyer={flyer} mode="full"/>
-  )
+  );
 }
