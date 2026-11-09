@@ -38,11 +38,11 @@ export default function OrganizationView() {
   }
 
   return (
-    <section className="flex flex-1 flex-col bg-(--parchment) px-5 pt-6 pb-24 text-(--soft-black) rounded-4xl inset-shadow-sm">
+    <section className="flex flex-1 flex-col bg-(--parchment) p-8 pb-28 text-(--soft-black) rounded-t-4xl inset-shadow-sm shadow-[0px_-3px_8px_rgba(0,0,0,0.25)] mt-3">
       <div className="mx-auto flex w-full max-w-md flex-col">
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center justify-between">
           <h1 className="heading">Organization List</h1>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center">
             <Link
               to="/favorites"
               aria-label={ids.length > 0 ? `View ${ids.length} favorite clubs` : "View favorite clubs"}
@@ -87,7 +87,7 @@ export default function OrganizationView() {
         {shownClubs.length === 0 ? (
           <p className="body-copy mt-6">No clubs match that name.</p>
         ) : (
-          <ul className="mt-5 flex flex-col gap-3">
+          <ul className="mt-4 flex flex-col gap-3">
             {shownClubs.map((club) => (
               <ClubCard key={club.id} club={club} />
             ))}

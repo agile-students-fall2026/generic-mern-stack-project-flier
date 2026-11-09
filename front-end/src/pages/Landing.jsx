@@ -22,7 +22,7 @@ export default function Landing() {
         </div>
 
         {/* Headline */}
-        <h1 className="heading mb-12 max-w-[300px]">
+        <h1 className="heading mb-12 max-w-75">
           Ready to fly through the clutter?
         </h1>
 
