@@ -15,7 +15,7 @@ const mockUser = {
 
 const accountItems = [
   { label: "Edit Profile Information", icon: editIcon, to: "/edit-profile" },
-  { label: "My Organizations", icon: groupIcon, to: "/organizations" },
+  { label: "My Organizations", icon: groupIcon, to: "/my-organizations" },
   { label: "Favorites", icon: starIcon, to: "/favorites" },
   { label: "Notifications", icon: notificationsIcon, to: "/notifications" },
 ];
@@ -49,7 +49,7 @@ function MenuCard({ items }) {
 
 export default function Profile() {
   return (
-    <section className="flex flex-1 flex-col items-center bg-(--parchment) px-5 pt-8 pb-10 text-(--soft-black) rounded-4xl inset-shadow-sm">
+    <section className="flex flex-1 flex-col items-center bg-(--parchment) p-8 pb-28 text-(--soft-black) rounded-4xl inset-shadow-sm shadow-[0px_-3px_8px_rgba(0,0,0,0.25)] mt-3">
       <div className="flex w-full max-w-md flex-col items-center">
         <img
           src={mockUser.photoUrl}

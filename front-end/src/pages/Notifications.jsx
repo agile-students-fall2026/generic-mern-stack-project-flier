@@ -39,7 +39,7 @@ export default function Notifications() {
   }
 
   return (
-    <section className="flex flex-1 flex-col bg-(--parchment) px-5 pt-6 pb-26 text-(--soft-black) rounded-4xl inset-shadow-sm">
+    <section className="flex flex-1 flex-col bg-(--parchment) p-8 pb-26 text-(--soft-black) rounded-4xl inset-shadow-sm shadow-[0px_-3px_8px_rgba(0,0,0,0.25)] mt-3">
       <div className="mx-auto flex w-full max-w-md flex-col">
         <div className="flex items-center justify-between gap-3">
           <h1 className="heading">Notifications</h1>
@@ -54,20 +54,19 @@ export default function Notifications() {
         </div>
 
         <div className="mt-2 flex items-center justify-between">
-          <p className="body-copy">Recent updates.</p>
           {notifications.length > 0 && (
             <button
               type="button"
               onClick={clearAll}
               className="body-copy underline underline-offset-4"
             >
-              Clear
+              Clear All
             </button>
           )}
         </div>
 
         {notifications.length === 0 ? (
-          <div className="mt-6 rounded-2xl bg-white px-5 py-8 text-center shadow-sm ring-1 ring-black/5">
+          <div className="mt-6 rounded-2xl p-8 text-center">
             <p className="body-copy">No notifications.</p>
             <Link
               to="/organizations"
@@ -77,12 +76,12 @@ export default function Notifications() {
             </Link>
           </div>
         ) : (
-          <div className="mt-5 flex flex-col gap-3">
+          <div className="mt-6 flex flex-col gap-3 text-(--soft-black)">
             {notifications.map((item) => (
-              <div key={item.id} className="bg-white p-4">
+              <div key={item.id} className="bg-(--paper) p-6 inset-shadow-sm shadow-sm">
                 <div className="flex justify-between">
-                  <p className="body-copy font-bold">{item.title}</p>
-                  <span className="body-copy text-sm opacity-60">
+                  <p className="feature-copy">{item.title}</p>
+                  <span className="body-copy opacity-60">
                     {item.time}
                   </span>
                 </div>

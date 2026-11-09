@@ -52,7 +52,7 @@ export default function OrganizationView() {
             >
               <HeaderStar filled={ids.length > 0} />
               {ids.length > 0 ? (
-                <span className="absolute top-0 right-0 flex min-w-4 items-center justify-center rounded-full bg-(--nyu-indigo) px-1 text-[10px] leading-4 font-bold text-white">
+                <span className="absolute top-0 right-0 flex min-w-4 items-center justify-center rounded-full bg-(--nyu-indigo) px-1 text-[10px] leading-4 font-bold text-(--paper)">
                   {ids.length}
                 </span>
               ) : null}
@@ -80,7 +80,7 @@ export default function OrganizationView() {
             aria-label="Search clubs by name"
             autoComplete="off"
             autoFocus
-            className="body-copy mt-4 w-full rounded-xl border border-black/10 bg-white px-4 py-3 outline-none focus-visible:ring-2 focus-visible:ring-(--nyu-indigo)"
+            className="body-copy mt-4 w-full rounded-xl border border-black/10 bg-(--paper) px-4 py-3 outline-none focus-visible:ring-2 focus-visible:ring-(--nyu-indigo)"
           />
         ) : null}
 

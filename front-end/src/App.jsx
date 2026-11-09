@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
 import OrganizationView from './pages/OrganizationView';
+import MyOrganizations from './pages/MyOrganizations';
 import ClubDetails from './pages/ClubDetails';
 import Favorites from './pages/Favorites';
 import { FavoritesProvider } from './context/FavoritesContext';
@@ -36,6 +37,7 @@ export default function App() {
         <Route element={<Layout />}>
           <Route path="/home" element={<Home />} />
           <Route path="/organizations" element={<OrganizationView />} />
+          <Route path="/my-organizations" element={<MyOrganizations />} />
           <Route path="/organizations/:clubId" element={<ClubDetails />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/calendar" element={<CalendarView />} />
