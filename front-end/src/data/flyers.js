@@ -8,6 +8,8 @@ export const flyers = [
     date: "2026-11-12",
     time: "19:00",
     location: "Kimmel Center, Room 905",
+    mapPosition: "left-[53%] top-[41%]",
+    mapLabel: "Kimmel Center",
   },
   {
     id: "code-lab-hack-night",
@@ -17,6 +19,8 @@ export const flyers = [
     date: "2026-11-18",
     time: "18:30",
     location: "60 5th Ave, Room 150",
+    mapPosition: "left-[35%] top-[65%]",
+    mapLabel: "60 Fifth Ave",
   },
   {
     id: "film-shorts",
@@ -26,5 +30,7 @@ export const flyers = [
     date: "2026-11-21",
     time: "20:00",
     location: "Tisch, 721 Broadway",
+    mapPosition: "left-[69%] top-[74%]",
+    mapLabel: "Tisch",
   },
 ];
