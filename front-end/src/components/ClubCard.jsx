@@ -9,7 +9,7 @@ export default function ClubCard({ club }) {
   const detailsPath = `/organizations/${club.id}`;
 
   return (
-    <li className="flex items-center gap-4 rounded-2xl bg-white px-4 py-4 shadow-sm ring-1 ring-black/5">
+    <li className="flex items-center gap-4 bg-(--paper) px-4 py-4 shadow-sm inset-shadow-sm">
       <Link to={detailsPath} className="shrink-0">
         <img
           src={club.logo}

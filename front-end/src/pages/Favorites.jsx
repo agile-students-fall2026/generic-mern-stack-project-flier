@@ -16,7 +16,7 @@ export default function Favorites() {
   }
 
   return (
-    <section className="flex flex-1 flex-col bg-(--parchment) px-5 pt-6 pb-8 text-(--soft-black)">
+    <section className="flex flex-1 flex-col bg-(--parchment) p-8 pb-28 text-(--soft-black) rounded-4xl inset-shadow-sm shadow-[0px_-3px_8px_rgba(0,0,0,0.25)] mt-3">
       <div className="mx-auto flex w-full max-w-md flex-col">
         <div className="flex items-center justify-between gap-3">
           <h1 className="heading">Favorites</h1>

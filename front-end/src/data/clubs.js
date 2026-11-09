@@ -6,6 +6,7 @@ export const clubs = [
     description: "Social dance every Thursday",
     email: "ballroom@nyu.edu",
     logo: "https://picsum.photos/seed/flier-ballroom/320/320",
+    isAdmin: true,
   },
   {
     id: "code-lab",
@@ -13,6 +14,7 @@ export const clubs = [
     description: "Weekly project nights",
     email: "codelab@nyu.edu",
     logo: "https://picsum.photos/seed/flier-code/320/320",
+    isAdmin: true,
   },
   {
     id: "film",
@@ -20,6 +22,7 @@ export const clubs = [
     description: "Screenings and short films",
     email: "film@nyu.edu",
     logo: "https://picsum.photos/seed/flier-film/320/320",
+    isAdmin: false,
   },
   {
     id: "hiking",
@@ -27,5 +30,6 @@ export const clubs = [
     description: "Day trips outside the city",
     email: "hiking@nyu.edu",
     logo: "https://picsum.photos/seed/flier-hike/320/320",
+    isAdmin: false,
   },
 ];
