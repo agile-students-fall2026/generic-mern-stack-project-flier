@@ -1,4 +1,7 @@
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import FavoriteButton from "./FavoriteButton";
+import { useFavorites } from "../context/FavoritesContext";
 import arrowBack from "../assets/arrow-back-40px.svg";
 
 /**
@@ -15,6 +18,10 @@ import arrowBack from "../assets/arrow-back-40px.svg";
  * Clicking on flyers with the handler will redirect to the flyer's full details.
  */
 export default function Flyer({ flyer, mode, onClick }) {
+  const navigate = useNavigate();
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const favorite = isFavorite(flyer.id);
+
   /* Format the date and time to be easily human readable */
   const formattedStart = new Intl.DateTimeFormat(undefined, {
     dateStyle: "medium",
@@ -39,8 +46,18 @@ export default function Flyer({ flyer, mode, onClick }) {
           {/* Title & Club */}
           <div className="absolute inset-x-0 bottom-0 z-10 p-8 text-(--paper)">
             <h1 className="heading py-2 max-w-full wrap-break-word">{flyer.title}</h1>
-            <p className="feature-copy bg-(--nyu-indigo) w-fit h-full px-4 py-2">{flyer.owner}</p>
+            <div className="flex items-center gap-2 bg-(--nyu-indigo) w-fit h-full px-4 py-2 justify-center">
+              <p className="feature-copy">{flyer.owner}</p>
+              <FavoriteButton light size="md" pressed={favorite} label={favorite ? "Remove flyer from favorites" : "Add flyer to favorites"} onClick={() => toggleFavorite(flyer.id)}/>
+            </div>
           </div>
+        </div>
+
+        {/* Edit Flyer Button -- TODO: Make this admin view only. */}
+        <div className="flex flex-col gap-4 justify-center items-center text-(--soft-black) w-full px-8 pt-8 bg-(--parchment)">
+          <button type="button" onClick={() => navigate(`/flyers/${flyer.id}/edit`)} className="feature-copy w-full px-6 py-2 bg-(--paper) border">
+            Edit Flyer
+          </button>
         </div>
 
         {/* Expanded Details */}

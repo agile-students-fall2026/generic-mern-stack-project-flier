@@ -6,9 +6,14 @@ function StarIcon({ filled }) {
   );
 }
 
-export default function FavoriteButton({ pressed, label, onClick, size = "md" }) {
+export default function FavoriteButton({ pressed, label, onClick, size = "md", light = false }) {
   const box = size === "lg" ? "size-8" : "size-7";
   const icon = size === "lg" ? "size-7" : "size-5";
+  const color = light
+    ? "text-white"
+    : pressed
+      ? "text-(--nyu-indigo)"
+      : "text-(--soft-black)/55";
 
   return (
     <button
@@ -16,9 +21,7 @@ export default function FavoriteButton({ pressed, label, onClick, size = "md" })
       aria-pressed={pressed}
       aria-label={label}
       onClick={onClick}
-      className={`flex ${box} shrink-0 cursor-pointer items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-(--nyu-indigo) ${
-        pressed ? "text-(--nyu-indigo)" : "text-(--soft-black)/55"
-      }`}
+      className={`flex ${box} shrink-0 cursor-pointer items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-(--nyu-indigo) ${color}`}
     >
       <span className={icon}>
         <StarIcon filled={pressed} />
