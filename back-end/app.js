@@ -30,6 +30,75 @@ app.get('/', (req, res) => {
   res.send('Flier backend is running!')
 })
 
+app.get('/api/flyers', (req, res) => {
+  try {
+    // TODO: Replace in Sprint 3 with proper database query
+    const { category } = req.query
+
+    // some filter on category was somehow applied, but isn't a string
+    if (category !== undefined && typeof category !== 'string') {
+      return res.status(400).json({ success: false, message: 'category must be a single string.' })
+    }
+
+    // find if the filter exists and use it, also set up a sort by date
+    const matchesCategory = flyer => flyer.categories?.includes(category)
+    const byStartDate = (a, b) => Date.parse(a.starts_at) - Date.parse(b.starts_at)
+
+    let flyerList = [...flyers]
+
+    if (category) {
+      flyerList = flyerList.filter(matchesCategory)
+    }
+
+    flyerList.sort(byStartDate)
+
+    return res.status(200).json({ success: true, flyers: flyerList })
+  } catch (err) {
+    console.error('GET /api/flyers failed:', err)
+    return res.status(500).json({ success: false, message: 'Something went wrong.' })
+  }
+})
+
+app.post('/api/flyers', (req, res) => {
+  try {
+    const { title, categories, starts_at, location, image, organizationId, description } = req.body ?? {}
+
+    // Check for missing fields and throw a 400 if fields are missing
+    const fields = { title, categories, starts_at, location, image, organizationId, description }
+    const missing = Object.keys(fields).filter(key => !fields[key])
+    if (missing.length) {
+      return res.status(400).json({ success: false, message: `Missing required fields: ${missing.join(', ')}` })
+    }
+
+    // Type & shape checks for category and date field
+    if (!Array.isArray(categories) || categories.length === 0) {
+      return res.status(400).json({ success: false, message: 'categories must be a non-empty array.' })
+    }
+    if (Number.isNaN(Date.parse(starts_at))) {
+      return res.status(400).json({ success: false, message: 'starts_at must be a valid date.' })
+    }
+
+    // TODO: Replace in Sprint 3 with proper database query
+    const org = organizations.find(o => String(o.id) === String(organizationId))
+    if (!org) {
+      return res.status(404).json({ success: false, message: 'Organization not found.' })
+    }
+
+    // TODO: Replace in Sprint 3 with proper database insert
+    const nextId = String(flyers.reduce((max, f) => Math.max(max, Number(f.id) || 0), 0) + 1)
+
+    // Whitelist fields so clients can't inject extra properties
+    const newFlyer = { id: nextId, title, categories, starts_at, location, image, organizationId, description }
+    flyers.push(newFlyer)
+    org.flyers.push(nextId)
+
+    return res.status(201).json({ success: true, flyer: newFlyer })
+  } catch (err) {
+    console.error('POST /api/flyers failed:', err)
+    return res.status(500).json({ success: false, message: 'Something went wrong.' })
+  }
+})
+
 app.post('/api/users/saved-flyers/:id', (req, res) => {
   const flyerId = req.params.id
 
