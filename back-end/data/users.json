@@ -1,32 +1,38 @@
 [
   {
     "id": "user-1",
-    "name": "Alex Morgan",
-    "email": "alex.morgan@example.edu"
+    "username": "Alex Morgan",
+    "email": "alex.morgan@example.edu",
+    "favoriteOrganizationIds": []
   },
   {
     "id": "user-2",
-    "name": "Jordan Lee",
-    "email": "jordan.lee@example.edu"
+    "username": "Jordan Lee",
+    "email": "jordan.lee@example.edu",
+    "favoriteOrganizationIds": []
   },
   {
     "id": "user-3",
-    "name": "Sam Rivera",
-    "email": "sam.rivera@example.edu"
+    "username": "Sam Rivera",
+    "email": "sam.rivera@example.edu",
+    "favoriteOrganizationIds": []
   },
   {
     "id": "user-4",
-    "name": "Taylor Chen",
-    "email": "taylor.chen@example.edu"
+    "username": "Taylor Chen",
+    "email": "taylor.chen@example.edu",
+    "favoriteOrganizationIds": []
   },
   {
     "id": "user-5",
-    "name": "Casey Patel",
-    "email": "casey.patel@example.edu"
+    "username": "Casey Patel",
+    "email": "casey.patel@example.edu",
+    "favoriteOrganizationIds": []
   },
   {
     "id": "user-6",
-    "name": "Riley Brooks",
-    "email": "riley.brooks@example.edu"
+    "username": "Riley Brooks",
+    "email": "riley.brooks@example.edu",
+    "favoriteOrganizationIds": ["2", "3"]
   }
 ]
