@@ -52,7 +52,14 @@ app.get('/api/flyers', (req, res) => {
 
     flyerList.sort(byStartDate)
 
-    return res.status(200).json({ success: true, flyers: flyerList })
+    // attach the org names so that the frontend can read a real string instead of IDs
+    const flyersWithOrganizationNames = flyerList.map(flyer => ({
+      ...flyer,
+      organizationName:
+        organizations.find(org => org.id === flyer.organizationId)?.name ?? null,
+    }))
+
+    return res.status(200).json({ success: true, flyers: flyersWithOrganizationNames })
   } catch (err) {
     console.error('GET /api/flyers failed:', err)
     return res.status(500).json({ success: false, message: 'Something went wrong.' })
