@@ -1,0 +1,32 @@
+[
+  {
+    "id": "user-1",
+    "name": "Alex Morgan",
+    "email": "alex.morgan@example.edu"
+  },
+  {
+    "id": "user-2",
+    "name": "Jordan Lee",
+    "email": "jordan.lee@example.edu"
+  },
+  {
+    "id": "user-3",
+    "name": "Sam Rivera",
+    "email": "sam.rivera@example.edu"
+  },
+  {
+    "id": "user-4",
+    "name": "Taylor Chen",
+    "email": "taylor.chen@example.edu"
+  },
+  {
+    "id": "user-5",
+    "name": "Casey Patel",
+    "email": "casey.patel@example.edu"
+  },
+  {
+    "id": "user-6",
+    "name": "Riley Brooks",
+    "email": "riley.brooks@example.edu"
+  }
+]

@@ -1,16 +1,62 @@
 [
   {
-    "id": "42",
+    "id": "1",
     "title": "Fall Hackathon",
+    "categories": ["Technical", "Networking", "Food", "Merch"],
+    "starts_at": "2026-11-04T12:00:00Z",
+    "location": "Bobst Library LL1",
+    "image": "https://picsum.photos/200/300",
     "organizationId": "1",
-    "date": "2026-11-20",
-    "location": "Bobst Library LL1"
+    "description": "Join us for a Hackathon at Bobst! Free food and merch provided."
   },
   {
-    "id": "102",
+    "id": "2",
     "title": "Intro to Express Workshop",
+    "categories": ["Technical", "Creative"],
+    "starts_at": "2026-11-12T16:00:00Z",
+    "location": "Kimmel Center 804",
+    "image": "https://picsum.photos/200/300",
     "organizationId": "1",
-    "date": "2026-11-25",
-    "location": "60 Fifth Ave"
+    "description": "Join us for a workshop at Kimmel! Free food and merch provided."
+  },
+  {
+    "id": "3",
+    "title": "Club Fest",
+    "categories": ["Creative", "Cultural", "Food", "Merch"],
+    "starts_at": "2026-12-04T13:00:00Z",
+    "location": "Kimmel Center 910",
+    "image": "https://picsum.photos/200/300",
+    "organizationId": "2",
+    "description": "Join us for a club fest at Kimmel! Free food and merch provided."
+  },
+  {
+    "id": "4",
+    "title": "Cultural Festival",
+    "categories": ["Cultural", "Music", "Food"],
+    "starts_at": "2026-11-26T18:00:00Z",
+    "location": "Riese Lounge",
+    "image": "https://picsum.photos/200/300",
+    "organizationId": "3",
+    "description": "Join us for a cultural festival at the Riese Lounge! Free food and merch provided."
+  },
+  {
+    "id": "5",
+    "title": "Headshot Booth",
+    "categories": ["Creative", "Networking"],
+    "starts_at": "2026-11-12T16:00:00Z",
+    "location": "Wasserman Center",
+    "image": "https://picsum.photos/200/300",
+    "organizationId": "4",
+    "description": "Take a new headshot at Wasserman!"
+  },
+  {
+    "id": "6",
+    "title": "Networking Event",
+    "categories": ["Networking", "Food"],
+    "starts_at": "2026-11-30T20:00:00Z",
+    "location": "Bobst Library LL2",
+    "image": "https://picsum.photos/200/300",
+    "organizationId": "5",
+    "description": "Join us for a networking event at Bobst! Free food and merch provided."
   }
 ]
