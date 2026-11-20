@@ -2,9 +2,10 @@ import express from 'express'
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import morgan from 'morgan' // middleware for nice logging of incoming HTTP requests
+import morgan from 'morgan'
 import cors from 'cors' 
-import dotenv from 'dotenv' // load environmental variables from a hidden file named .env
+import dotenv from 'dotenv'
+import uploadRoutes from './routes/uploads.js'
 
 const app = express()
 const __filename = fileURLToPath(import.meta.url)
@@ -16,6 +17,7 @@ dotenv.config({ silent: true })
 const organizations = JSON.parse(
   fs.readFileSync(path.join(__dirname, 'data', 'organizations.json'), 'utf8')
 )
+
 const flyers = JSON.parse(
   fs.readFileSync(path.join(__dirname, 'data', 'flyers.json'), 'utf8')
 )
