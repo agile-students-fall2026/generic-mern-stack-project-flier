@@ -120,7 +120,7 @@ export default function CalendarView() {
           {events.length === 0 ? (
             <p className="body-copy px-5 pt-4 pb-8">No events on this day.</p>
           ) : (
-            <ul className="mt-4 flex gap-3 overflow-x-auto px-5 pb-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <ul className="mt-4 flex gap-3 overflow-x-auto px-5 pb-8 scrollbar-none [&::-webkit-scrollbar]:hidden">
               {events.map((flyer) => (
                 <li key={flyer.id} className="shrink-0">
                   <Flyer flyer={flyer} mode="carousel" />

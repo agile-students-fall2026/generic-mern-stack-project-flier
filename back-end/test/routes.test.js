@@ -9,13 +9,13 @@ describe('Flier API Routes', () => {
     it('should respond with HTTP 201 and confirm the flyer was saved', done => {
       request
         .execute(app)
-        .post('/api/users/saved-flyers/42')
+        .post('/api/users/saved-flyers/1')
         .end((err, res) => {
           expect(err).to.be.null // not null
           expect(res).to.have.status(201) // HTTP response status code
           expect(res).to.be.json // HTTP response content type header
           expect(res.body).to.have.property('status').that.equals('success')
-          expect(res.body).to.have.property('savedFlyerId').that.equals('42')
+          expect(res.body).to.have.property('savedFlyerId').that.equals('1')
           expect(res.body).to.have.property('flyer')
           done()
         })

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "notification-1",
+    "userId": "user-6",
+    "title": "New Flyer Posted",
+    "message": "NYU Design Collective posted Club Fest.",
+    "createdAt": "2026-11-19T14:50:00Z",
+    "read": false,
+    "organizationId": "2",
+    "flyerId": "3"
+  },
+  {
+    "id": "notification-2",
+    "userId": "user-6",
+    "title": "New Flyer Posted",
+    "message": "NYU Cultural Society posted Cultural Festival.",
+    "createdAt": "2026-11-19T12:50:00Z",
+    "read": false,
+    "organizationId": "3",
+    "flyerId": "4"
+  },
+  {
+    "id": "notification-3",
+    "userId": "user-6",
+    "title": "Event Reminder",
+    "message": "Club Fest is coming up at Kimmel Center 910.",
+    "createdAt": "2026-11-18T15:00:00Z",
+    "read": true,
+    "organizationId": "2",
+    "flyerId": "3"
+  }
+]

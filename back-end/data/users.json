@@ -1,0 +1,38 @@
+[
+  {
+    "id": "user-1",
+    "username": "Alex Morgan",
+    "email": "alex.morgan@example.edu",
+    "favoriteOrganizationIds": []
+  },
+  {
+    "id": "user-2",
+    "username": "Jordan Lee",
+    "email": "jordan.lee@example.edu",
+    "favoriteOrganizationIds": []
+  },
+  {
+    "id": "user-3",
+    "username": "Sam Rivera",
+    "email": "sam.rivera@example.edu",
+    "favoriteOrganizationIds": []
+  },
+  {
+    "id": "user-4",
+    "username": "Taylor Chen",
+    "email": "taylor.chen@example.edu",
+    "favoriteOrganizationIds": []
+  },
+  {
+    "id": "user-5",
+    "username": "Casey Patel",
+    "email": "casey.patel@example.edu",
+    "favoriteOrganizationIds": []
+  },
+  {
+    "id": "user-6",
+    "username": "Riley Brooks",
+    "email": "riley.brooks@example.edu",
+    "favoriteOrganizationIds": ["2", "3"]
+  }
+]
