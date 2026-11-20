@@ -8,7 +8,7 @@ import arrowBack from "../assets/arrow-back-40px.svg";
  * Takes in two props: flyer and mode.
  * 
  * The flyer prop provides the specific flyer from the backend which exposes the following to be read:
- * - id, title, starts_at, location, image, owner, and description.
+ * - id, title, starts_at, categories (array), location, image, organizationName, and description.
  * 
  * The mode prop provides the type of view the flyer should be rendered in.
  * - "carousel" means that only image should be rendered since it is appearing in a carousel (home/calendar).
@@ -31,7 +31,7 @@ export default function Flyer({ flyer, mode }) {
       <article className="bg-(--paper) mt-3 pb-18">
         {/* Flyer Image & Overlay Elements */}
         <div className="w-full h-[calc(100vh-16rem)] aspect-8.5/11 relative">
-          <img src={flyer.image} alt={`A flyer uploaded by ${flyer.owner}`} className="w-full h-full object-cover rounded-t-4xl shadow-[0px_-3px_8px_rgba(0,0,0,0.25)]"/>
+          <img src={flyer.image} alt={`A flyer posted by ${flyer.organizationName}`} className="w-full h-full object-cover rounded-t-4xl shadow-[0px_-3px_8px_rgba(0,0,0,0.25)]"/>
           {/* Back Arrow */}
           <Link to="/home" aria-label="Back" className="absolute left-6 top-6 z-20">
             <img src={arrowBack} alt="Back arrow to home" className="w-8 p-1 bg-(--soft-black) rounded-full"/>
@@ -44,7 +44,7 @@ export default function Flyer({ flyer, mode }) {
           <div className="absolute inset-x-0 bottom-0 z-10 p-8 text-(--paper)">
             <h1 className="heading py-2 max-w-full wrap-break-word">{flyer.title}</h1>
             <div className="flex items-center gap-2 bg-(--nyu-indigo) w-fit h-full px-4 py-2 justify-center">
-              <p className="feature-copy">{flyer.owner}</p>
+              <p className="feature-copy">{flyer.organizationName}</p>
               <FavoriteButton light size="md" pressed={favorite} label={favorite ? "Remove flyer from favorites" : "Add flyer to favorites"} onClick={() => toggleFavorite(flyer.id)}/>
             </div>
           </div>
@@ -81,7 +81,7 @@ export default function Flyer({ flyer, mode }) {
     return (
       /* A click sends users to the full flyer details. Fixed aspect ratio of 8.5x11. */
       <Link to={`/flyer/${flyer.id}`} className="block w-52 aspect-8.5/11 shrink-0 overflow-hidden">
-        <img src={flyer.image} alt={`A flyer uploaded by ${flyer.owner}`} className="h-full w-full object-cover transition-transform duration-200 hover:scale-[1.03]"/>
+        <img src={flyer.image} alt={`A flyer posted by ${flyer.organizationName}`} className="h-full w-full object-cover transition-transform duration-200 hover:scale-[1.03]"/>
       </Link>
     );
   }
