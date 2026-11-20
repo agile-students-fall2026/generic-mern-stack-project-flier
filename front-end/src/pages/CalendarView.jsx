@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Flyer from "../components/Flyer";
-import { eventDateKey, homeFlyers } from "../data/flyers";
 
 const WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 

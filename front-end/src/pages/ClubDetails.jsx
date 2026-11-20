@@ -2,8 +2,6 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import arrowBack from "../assets/arrow-back-40px.svg";
 import FavoriteButton from "../components/FavoriteButton";
-import { useFavorites } from "../context/FavoritesContext";
-import { clubs } from "../data/clubs";
 
 function ClubDetailPanel({ club }) {
   const [adminRequested, setAdminRequested] = useState(false);

@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import ClubCard from "../components/ClubCard";
-import { useFavorites } from "../context/FavoritesContext";
-import { clubs } from "../data/clubs";
 
 function SearchIcon() {
   return (

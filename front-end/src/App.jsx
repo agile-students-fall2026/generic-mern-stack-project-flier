@@ -9,11 +9,9 @@ import OrganizationView from './pages/OrganizationView';
 import MyOrganizations from './pages/MyOrganizations';
 import ClubDetails from './pages/ClubDetails';
 import Favorites from './pages/Favorites';
-import { FavoritesProvider } from './context/FavoritesContext';
 import CalendarView from './pages/CalendarView';
 import AddFlyer from './pages/AddFlyer';
 import EditFlyer from './pages/EditFlyer';
-import { FlyersProvider } from './context/FlyersContext';
 import FlyerDetails from './pages/FlyerDetails';
 import MapView from './pages/MapView';
 import Profile from './pages/Profile';
@@ -26,8 +24,6 @@ import ForgotPassword from './pages/ForgotPassword';
 export default function App() {
   return (
     <BrowserRouter>
-      <FavoritesProvider>
-      <FlyersProvider>
       <Routes>
         {/* No Header or NavBar */}
         <Route path="/" element={<Landing />} />
@@ -54,8 +50,6 @@ export default function App() {
           <Route path="/support" element={<Support />} />
         </Route>
       </Routes>
-      </FlyersProvider>
-      </FavoritesProvider>
     </BrowserRouter>
   );
 }

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useFlyers } from "../context/FlyersContext";
 
 export default function MapView() {
   const { flyers } = useFlyers();

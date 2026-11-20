@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import arrowBack from "../assets/arrow-back-40px.svg";
 import ClubCard from "../components/ClubCard";
-import { useFavorites } from "../context/FavoritesContext";
 
 export default function Favorites() {
   const navigate = useNavigate();

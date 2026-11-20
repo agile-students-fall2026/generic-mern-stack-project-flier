@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import FavoriteButton from "./FavoriteButton";
-import { useFavorites } from "../context/FavoritesContext";
 
 export default function ClubCard({ club }) {
   const { isFavorite, toggleFavorite } = useFavorites();

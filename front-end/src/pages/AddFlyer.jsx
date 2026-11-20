@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AddFlyerForm from "../components/AddFlyerForm";
-import { useFlyers } from "../context/FlyersContext";
+import { useFlyers } from "../hooks/useFlyers";
 
 const primaryButton = "feature-copy flex h-fit w-full p-6 items-center justify-center rounded-xl border border-black/10 bg-white text-base font-semibold shadow-sm active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-(--nyu-indigo)";
 

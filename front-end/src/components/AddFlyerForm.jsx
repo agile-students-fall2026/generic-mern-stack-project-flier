@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import arrowBack from "../assets/arrow-back-40px.svg";
-import { clubs } from "../data/clubs";
 
 const emptyFlyer = {
-  image: "",
+  id: "",
   title: "",
-  clubId: "",
-  date: "",
-  time: "",
+  categories: [],
+  starts_at: "",
   location: "",
+  image: "",
+  organizationId: "",
+  description: ""
 };
 
 const inputClass =

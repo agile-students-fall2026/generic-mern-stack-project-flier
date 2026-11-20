@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import Flyer from "../components/Flyer";
-import { flyerById } from "../data/flyers";
 
 export default function FlyerDetails() {
   /* Grab the id from the URL params */
