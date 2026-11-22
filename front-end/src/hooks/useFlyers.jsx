@@ -25,10 +25,7 @@ export function useFlyers(filter = "") {
       setError("");
 
       // Read in a category query and apply it if needed
-      const query = currFilter;
-      if (query !== "") {
-        query = `?category=${encodeURIComponent(currFilter)}`;
-      }
+      const query = currFilter ? `?category=${encodeURIComponent(currFilter)}` : "";
 
       try {
         // Controller lets us cancel if the page unmounts or the category changes before it finishes
