@@ -1,0 +1,26 @@
+.landing-page {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.landing-page::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 55%;
+  background-image:
+    linear-gradient(to bottom, transparent 40%, var(--parchment) 100%),
+    url("../assets/hookImage.jpg");
+  background-size: cover;
+  background-position: center 60%;
+  filter: blur(2px);
+  transform: scale(1.03);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.landing-content {
+  position: relative;
+  z-index: 1;
+}
