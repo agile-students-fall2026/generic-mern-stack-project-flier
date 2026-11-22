@@ -79,6 +79,6 @@ describe('POST /api/uploads', () => {
       .attach('image', tooBig, { filename: 'huge.png', contentType: 'image/png' })
 
     expect(res).to.have.status(413)
-    expect(res.body.error).to.include('5 MB')
+    expect(res.body.error).to.include('25 MB')
   })
 })
