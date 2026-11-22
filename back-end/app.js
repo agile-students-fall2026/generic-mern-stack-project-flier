@@ -37,7 +37,7 @@ function withOrganizationName(flyer) {
   return {
     ...flyer,
     organizationName:
-      organizations.find(org => org.id === flyer.organizationId)?.name ?? null,
+      organizations.find(org => String(org.id) === String(flyer.organizationId))?.name ?? null,
   }
 }
 
@@ -65,6 +65,31 @@ function validateFlyerFields(fields, { partial = false } = {}) {
   }
 
   return null
+}
+
+function findFlyerIndex(id) {
+  return flyers.findIndex(f => String(f.id) === String(id))
+}
+
+function findOrganization(id) {
+  return organizations.find(o => String(o.id) === String(id))
+}
+
+// Keep each organization's flyer id list in sync when a flyer changes clubs.
+function moveFlyerBetweenOrganizations(flyerId, fromOrgId, toOrgId) {
+  if (String(fromOrgId) === String(toOrgId)) {
+    return
+  }
+
+  const fromOrg = findOrganization(fromOrgId)
+  const toOrg = findOrganization(toOrgId)
+
+  if (fromOrg?.flyers) {
+    fromOrg.flyers = fromOrg.flyers.filter(id => String(id) !== String(flyerId))
+  }
+  if (toOrg && !toOrg.flyers.some(id => String(id) === String(flyerId))) {
+    toOrg.flyers.push(String(flyerId))
+  }
 }
 
 app.get('/', (req, res) => {
@@ -113,7 +138,7 @@ app.post('/api/flyers', (req, res) => {
     }
 
     // TODO: Replace in Sprint 3 with proper database query
-    const org = organizations.find(o => String(o.id) === String(fields.organizationId))
+    const org = findOrganization(fields.organizationId)
     if (!org) {
       return res.status(404).json({ success: false, message: 'Organization not found.' })
     }
@@ -136,12 +161,15 @@ app.post('/api/flyers', (req, res) => {
 app.get('/api/flyers/:id', (req, res) => {
   try {
     // TODO: Replace in Sprint 3 with proper database query
-    const flyer = flyers.find(f => String(f.id) === String(req.params.id))
-    if (!flyer) {
+    const flyerIndex = findFlyerIndex(req.params.id)
+    if (flyerIndex === -1) {
       return res.status(404).json({ success: false, message: 'Flyer not found.' })
     }
 
-    return res.status(200).json({ success: true, flyer: withOrganizationName(flyer) })
+    return res.status(200).json({
+      success: true,
+      flyer: withOrganizationName(flyers[flyerIndex]),
+    })
   } catch (err) {
     console.error('GET /api/flyers/:id failed:', err)
     return res.status(500).json({ success: false, message: 'Something went wrong.' })
@@ -151,7 +179,7 @@ app.get('/api/flyers/:id', (req, res) => {
 app.put('/api/flyers/:id', (req, res) => {
   try {
     // TODO: Replace in Sprint 3 with proper database query
-    const flyerIndex = flyers.findIndex(f => String(f.id) === String(req.params.id))
+    const flyerIndex = findFlyerIndex(req.params.id)
     if (flyerIndex === -1) {
       return res.status(404).json({ success: false, message: 'Flyer not found.' })
     }
@@ -159,20 +187,30 @@ app.put('/api/flyers/:id', (req, res) => {
     const updates = Object.fromEntries(
       Object.entries(readFlyerFields(req.body)).filter(([, value]) => value !== undefined)
     )
+    if (!Object.keys(updates).length) {
+      return res.status(400).json({
+        success: false,
+        message: 'Provide at least one flyer field to update.',
+      })
+    }
+
     const validationError = validateFlyerFields(updates, { partial: true })
     if (validationError) {
       return res.status(400).json({ success: false, message: validationError })
     }
 
+    const current = flyers[flyerIndex]
+
     if (updates.organizationId !== undefined) {
-      const org = organizations.find(o => String(o.id) === String(updates.organizationId))
+      const org = findOrganization(updates.organizationId)
       if (!org) {
         return res.status(404).json({ success: false, message: 'Organization not found.' })
       }
+      moveFlyerBetweenOrganizations(current.id, current.organizationId, updates.organizationId)
     }
 
     // TODO: Replace in Sprint 3 with proper database update
-    const updatedFlyer = { ...flyers[flyerIndex], ...updates, id: flyers[flyerIndex].id }
+    const updatedFlyer = { ...current, ...updates, id: current.id }
     flyers[flyerIndex] = updatedFlyer
 
     return res.status(200).json({ success: true, flyer: withOrganizationName(updatedFlyer) })
