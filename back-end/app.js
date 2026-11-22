@@ -33,6 +33,40 @@ app.use('/static', express.static('public'))
 // flyer image uploads (Multer)
 app.use('/api/uploads', uploadRoutes)
 
+function withOrganizationName(flyer) {
+  return {
+    ...flyer,
+    organizationName:
+      organizations.find(org => org.id === flyer.organizationId)?.name ?? null,
+  }
+}
+
+function readFlyerFields(body = {}) {
+  const { title, categories, starts_at, location, image, organizationId, description } = body
+  return { title, categories, starts_at, location, image, organizationId, description }
+}
+
+function validateFlyerFields(fields, { partial = false } = {}) {
+  if (!partial) {
+    const missing = Object.keys(fields).filter(key => !fields[key])
+    if (missing.length) {
+      return `Missing required fields: ${missing.join(', ')}`
+    }
+  }
+
+  if (fields.categories !== undefined) {
+    if (!Array.isArray(fields.categories) || fields.categories.length === 0) {
+      return 'categories must be a non-empty array.'
+    }
+  }
+
+  if (fields.starts_at !== undefined && Number.isNaN(Date.parse(fields.starts_at))) {
+    return 'starts_at must be a valid date.'
+  }
+
+  return null
+}
+
 app.get('/', (req, res) => {
   res.send('Flier backend is running!')
 })
@@ -60,13 +94,10 @@ app.get('/api/flyers', (req, res) => {
     flyerList.sort(byStartDate)
 
     // attach the org names so that the frontend can read a real string instead of IDs
-    const flyersWithOrganizationNames = flyerList.map(flyer => ({
-      ...flyer,
-      organizationName:
-        organizations.find(org => org.id === flyer.organizationId)?.name ?? null,
-    }))
-
-    return res.status(200).json({ success: true, flyers: flyersWithOrganizationNames })
+    return res.status(200).json({
+      success: true,
+      flyers: flyerList.map(withOrganizationName),
+    })
   } catch (err) {
     console.error('GET /api/flyers failed:', err)
     return res.status(500).json({ success: false, message: 'Something went wrong.' })
@@ -75,25 +106,14 @@ app.get('/api/flyers', (req, res) => {
 
 app.post('/api/flyers', (req, res) => {
   try {
-    const { title, categories, starts_at, location, image, organizationId, description } = req.body ?? {}
-
-    // Check for missing fields and throw a 400 if fields are missing
-    const fields = { title, categories, starts_at, location, image, organizationId, description }
-    const missing = Object.keys(fields).filter(key => !fields[key])
-    if (missing.length) {
-      return res.status(400).json({ success: false, message: `Missing required fields: ${missing.join(', ')}` })
-    }
-
-    // Type & shape checks for category and date field
-    if (!Array.isArray(categories) || categories.length === 0) {
-      return res.status(400).json({ success: false, message: 'categories must be a non-empty array.' })
-    }
-    if (Number.isNaN(Date.parse(starts_at))) {
-      return res.status(400).json({ success: false, message: 'starts_at must be a valid date.' })
+    const fields = readFlyerFields(req.body)
+    const validationError = validateFlyerFields(fields)
+    if (validationError) {
+      return res.status(400).json({ success: false, message: validationError })
     }
 
     // TODO: Replace in Sprint 3 with proper database query
-    const org = organizations.find(o => String(o.id) === String(organizationId))
+    const org = organizations.find(o => String(o.id) === String(fields.organizationId))
     if (!org) {
       return res.status(404).json({ success: false, message: 'Organization not found.' })
     }
@@ -102,13 +122,62 @@ app.post('/api/flyers', (req, res) => {
     const nextId = String(flyers.reduce((max, f) => Math.max(max, Number(f.id) || 0), 0) + 1)
 
     // Whitelist fields so clients can't inject extra properties
-    const newFlyer = { id: nextId, title, categories, starts_at, location, image, organizationId, description }
+    const newFlyer = { id: nextId, ...fields }
     flyers.push(newFlyer)
     org.flyers.push(nextId)
 
-    return res.status(201).json({ success: true, flyer: newFlyer })
+    return res.status(201).json({ success: true, flyer: withOrganizationName(newFlyer) })
   } catch (err) {
     console.error('POST /api/flyers failed:', err)
+    return res.status(500).json({ success: false, message: 'Something went wrong.' })
+  }
+})
+
+app.get('/api/flyers/:id', (req, res) => {
+  try {
+    // TODO: Replace in Sprint 3 with proper database query
+    const flyer = flyers.find(f => String(f.id) === String(req.params.id))
+    if (!flyer) {
+      return res.status(404).json({ success: false, message: 'Flyer not found.' })
+    }
+
+    return res.status(200).json({ success: true, flyer: withOrganizationName(flyer) })
+  } catch (err) {
+    console.error('GET /api/flyers/:id failed:', err)
+    return res.status(500).json({ success: false, message: 'Something went wrong.' })
+  }
+})
+
+app.put('/api/flyers/:id', (req, res) => {
+  try {
+    // TODO: Replace in Sprint 3 with proper database query
+    const flyerIndex = flyers.findIndex(f => String(f.id) === String(req.params.id))
+    if (flyerIndex === -1) {
+      return res.status(404).json({ success: false, message: 'Flyer not found.' })
+    }
+
+    const updates = Object.fromEntries(
+      Object.entries(readFlyerFields(req.body)).filter(([, value]) => value !== undefined)
+    )
+    const validationError = validateFlyerFields(updates, { partial: true })
+    if (validationError) {
+      return res.status(400).json({ success: false, message: validationError })
+    }
+
+    if (updates.organizationId !== undefined) {
+      const org = organizations.find(o => String(o.id) === String(updates.organizationId))
+      if (!org) {
+        return res.status(404).json({ success: false, message: 'Organization not found.' })
+      }
+    }
+
+    // TODO: Replace in Sprint 3 with proper database update
+    const updatedFlyer = { ...flyers[flyerIndex], ...updates, id: flyers[flyerIndex].id }
+    flyers[flyerIndex] = updatedFlyer
+
+    return res.status(200).json({ success: true, flyer: withOrganizationName(updatedFlyer) })
+  } catch (err) {
+    console.error('PUT /api/flyers/:id failed:', err)
     return res.status(500).json({ success: false, message: 'Something went wrong.' })
   }
 })
