@@ -9,6 +9,7 @@ const CategoryLookup = {
   today: "Today's Events",
   forYou: "For You",
   new: "Newly Added",
+  calendar: "Events",
 };
 
 export default function FlyerCarousel({ category, flyers = [], loading, error }) {
@@ -16,7 +17,10 @@ export default function FlyerCarousel({ category, flyers = [], loading, error })
 
   return (
     <section className="flex justify-center items-center flex-col h-fit gap-2">
-      <h1 className="heading w-full text-start text-(--soft-black)">{CategoryLookup[category]}</h1>
+      {/* Render a heading for home page carousels and ignore for calendar view. */}
+      {category !== "calendar" && (
+        <h1 className="heading w-full text-start text-(--soft-black)">{CategoryLookup[category]}</h1>
+      )}
 
       <div className="flex w-full gap-2">
         {loading && <p className="body-copy">Loading flyers...</p>}
@@ -26,7 +30,11 @@ export default function FlyerCarousel({ category, flyers = [], loading, error })
         )}
         
         {!loading && !error && sectionFlyers.length === 0 && (
-          <p className="body-copy">No flyers in this section yet.</p>
+          <p className="body-copy">
+            {category === "calendar"
+              ? "No events have been registered for this day."
+              : "No flyers in this section yet."}
+          </p>
         )}
       </div>
       <div className="flex gap-3 overflow-x-auto w-full">

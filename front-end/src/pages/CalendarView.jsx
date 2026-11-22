@@ -1,10 +1,20 @@
 import { useState } from "react";
-import Flyer from "../components/Flyer";
+import FlyerCarousel from "../components/FlyerCarousel";
+import { useFlyers } from "../hooks/useFlyers";
+import chevronLeft from "../assets/chevron-left-40px-black.svg";
+import chevronRight from "../assets/chevron-right-40px-black.svg";
 
 const WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
 function startOfDay(date) {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function eventDateKey(value) {
+  const date = value instanceof Date ? value : new Date(value);
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${date.getFullYear()}-${month}-${day}`;
 }
 
 function monthLabel(date) {
@@ -21,15 +31,6 @@ function dayLabel(date) {
 
 const today = startOfDay(new Date());
 
-function Chevron({ direction }) {
-  const path = direction === "left" ? "M15 6l-6 6 6 6" : "M9 6l6 6-6 6";
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth={2.25} className="size-7">
-      <path strokeLinecap="round" strokeLinejoin="round" d={path} />
-    </svg>
-  );
-}
-
 function calendarCells(monthDate) {
   const year = monthDate.getFullYear();
   const month = monthDate.getMonth();
@@ -43,12 +44,13 @@ function calendarCells(monthDate) {
 }
 
 export default function CalendarView() {
+  const { flyers, loading, error } = useFlyers();
   const [visibleMonth, setVisibleMonth] = useState(
     () => new Date(today.getFullYear(), today.getMonth(), 1),
   );
   const [selected, setSelected] = useState(today);
   const selectedKey = eventDateKey(selected);
-  const events = homeFlyers.filter((flyer) => eventDateKey(flyer.starts_at) === selectedKey);
+  const events = flyers.filter((flyer) => eventDateKey(flyer.starts_at) === selectedKey);
 
   function shiftMonth(delta) {
     const nextMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + delta, 1);
@@ -59,74 +61,72 @@ export default function CalendarView() {
   }
 
   return (
-    <section className="flex flex-1 flex-col bg-(--parchment) text-(--soft-black)">
+    <section className="flex flex-col h-full bg-(--parchment) text-(--soft-black) rounded-4xl inset-shadow-sm shadow-[0px_-3px_8px_rgba(0,0,0,0.25)] mt-3">
       <div className="mx-auto flex w-full max-w-md flex-1 flex-col">
-        <div className="px-4 pt-6 pb-5">
+        {/* Calendar */}
+        <div className="p-8 gap-2 flex flex-col">
+          {/* Month and Switch Buttons */}
           <div className="flex items-center justify-between gap-2">
             <button
               type="button"
               aria-label="Previous month"
               onClick={() => shiftMonth(-1)}
-              className="flex size-10 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-(--nyu-indigo)"
+              className="flex items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-(--nyu-indigo)"
             >
-              <Chevron direction="left" />
+              <img src={chevronLeft} alt="" aria-hidden="true" />
             </button>
-            <h1 className="text-center text-3xl font-bold [font-family:var(--font-petrona)]">
+            <h1 className="heading text-center">
               {monthLabel(visibleMonth)}
             </h1>
             <button
               type="button"
               aria-label="Next month"
               onClick={() => shiftMonth(1)}
-              className="flex size-10 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-(--nyu-indigo)"
+              className="flex items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-(--nyu-indigo)"
             >
-              <Chevron direction="right" />
+              <img src={chevronRight} alt="" aria-hidden="true" />
             </button>
           </div>
 
-          <div className="mt-5 grid grid-cols-7 text-center" role="grid" aria-label={monthLabel(visibleMonth)}>
-            {WEEKDAYS.map((weekday) => (
-              <div key={weekday} role="columnheader" className="pb-2 text-sm font-medium text-(--soft-black)/70">
-                {weekday}
-              </div>
-            ))}
-            {calendarCells(visibleMonth).map((date, index) => {
-              if (!date) {
-                return <div key={`blank-${index}`} role="gridcell" />;
-              }
-              const isSelected = eventDateKey(date) === selectedKey;
-              return (
-                <div key={eventDateKey(date)} role="gridcell" className="py-1">
-                  <button
-                    type="button"
-                    aria-pressed={isSelected}
-                    aria-label={dayLabel(date)}
-                    onClick={() => setSelected(date)}
-                    className={`mx-auto flex size-9 items-center justify-center rounded-full text-base focus-visible:outline-2 focus-visible:outline-(--nyu-indigo) ${
-                      isSelected ? "font-bold ring-2 ring-(--soft-black)" : ""
-                    }`}
-                  >
-                    {date.getDate()}
-                  </button>
+          {/* Weekdays and Dates */}
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-row text-center">
+              {WEEKDAYS.map((weekday) => (
+                <div key={weekday} className="basis-[14.2857%] feature-copy text-(--soft-black)/60">
+                  {weekday}
                 </div>
-              );
-            })}
+              ))}
+            </div>
+            <div className="flex flex-row flex-wrap text-center">
+              {calendarCells(visibleMonth).map((date, index) => {
+                if (!date) {
+                  return <div key={`blank-${index}`} className="basis-[14.2857%] grow-0 shrink-0" />;
+                }
+                const isSelected = eventDateKey(date) === selectedKey;
+                return (
+                  <div key={eventDateKey(date)} className="basis-[14.2857%] grow-0 shrink-0 py-1">
+                    <button
+                      type="button"
+                      aria-pressed={isSelected}
+                      aria-label={dayLabel(date)}
+                      onClick={() => setSelected(date)}
+                      className={`mx-auto flex size-10 items-center justify-center rounded-full feature-copy ${
+                        isSelected ? "bg-(--nyu-indigo) text-(--paper)" : ""
+                      }`}
+                    >
+                      {date.getDate()}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
-
-        <div className="flex flex-1 flex-col bg-(--nyu-indigo) text-white">
-          <h2 className="subheading px-5 pt-5">{dayLabel(selected)}</h2>
-          {events.length === 0 ? (
-            <p className="body-copy px-5 pt-4 pb-8">No events on this day.</p>
-          ) : (
-            <ul className="mt-4 flex gap-3 overflow-x-auto px-5 pb-8 scrollbar-none [&::-webkit-scrollbar]:hidden">
-              {events.map((flyer) => (
-                <li key={flyer.id} className="shrink-0">
-                  <Flyer flyer={flyer} mode="carousel" />
-                </li>
-              ))}
-            </ul>
-          )}
+        
+        {/* Flyer display */}
+        <div className="flex flex-col bg-(--nyu-indigo) text-(--paper) p-8 gap-2 h-full pb-28">
+          <h2 className="heading">{dayLabel(selected)}</h2>
+          <FlyerCarousel category="calendar" flyers={events} loading={loading} error={error} />
         </div>
       </div>
     </section>

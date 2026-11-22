@@ -12,6 +12,8 @@ export function getFlyersBySection(category, flyers) {
     case "new":
       // displays up to 10 new flyers, sorted by newest (largest) ids
       return [...flyers].sort((a,b) => Number(b.id) - Number(a.id)).slice(0,10);
+    case "calendar":
+      return flyers;
     default:
       return [];
   }
