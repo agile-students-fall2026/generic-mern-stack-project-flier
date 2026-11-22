@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AddFlyerForm from "../components/AddFlyerForm";
 import { useFlyers } from "../hooks/useFlyers";
@@ -29,10 +29,49 @@ export default function AddFlyer() {
   const { addFlyer } = useFlyers();
   // Mock of the user's admin role until accounts come from the back end.
   const [isAdmin, setIsAdmin] = useState(false);
+  const [organizations, setOrganizations] = useState([]);
+  const [loadingOrganizations, setLoadingOrganizations] = useState(false);
+  const [organizationError, setOrganizationError] = useState("");
 
-  function handlePost(values) {
-    const id = addFlyer(values);
-    navigate(`/flyers/${id}/edit`, { state: { notice: "Flyer posted!" } });
+  useEffect(() => {
+    if (!isAdmin) {return undefined;}
+
+    const controller = new AbortController();
+    async function loadOrganizations() {
+      setLoadingOrganizations(true);
+      setOrganizationError("");
+      try {
+        const response = await fetch("/api/organizations", { signal: controller.signal });
+        const data = await response.json();
+        if (!response.ok || !Array.isArray(data)) {
+          throw new Error("Could not load organizations.");
+        }
+        setOrganizations(data);
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          setOrganizationError(error.message || "Could not load organizations.");
+        }
+      } finally {
+        if (!controller.signal.aborted) {setLoadingOrganizations(false);}
+      }
+    }
+
+    loadOrganizations();
+    return () => controller.abort();
+  }, [isAdmin]);
+
+  async function handlePost(values) {
+    const formData = new FormData();
+    formData.append("image", values.imageFile);
+    const uploadResponse = await fetch("/api/uploads", { method: "POST", body: formData });
+    const uploadData = await uploadResponse.json();
+    if (!uploadResponse.ok || !uploadData.url) {
+      throw new Error(uploadData.error || "Could not upload flyer file.");
+    }
+
+    const { imageFile, ...flyer } = values;
+    const createdFlyer = await addFlyer({ ...flyer, image: uploadData.url });
+    navigate(`/flyer/${createdFlyer.id}`);
   }
 
   return (
@@ -49,7 +88,13 @@ export default function AddFlyer() {
       </div>
 
       {isAdmin ? (
-        <AddFlyerForm heading="Add a Flyer" submitLabel="Post!" onSubmit={handlePost} />
+        loadingOrganizations ? (
+          <p className="body-copy p-8">Loading organizations…</p>
+        ) : organizationError ? (
+          <p role="alert" className="body-copy p-8">{organizationError}</p>
+        ) : (
+          <AddFlyerForm mode="add" organizations={organizations} onSubmit={handlePost} />
+        )
       ) : (
         <section className="flex flex-1 flex-col p-8 text-(--soft-black) justify-center">
           <div className="mx-auto w-full max-w-md">

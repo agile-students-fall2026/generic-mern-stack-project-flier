@@ -25,9 +25,9 @@ export function useFlyers(filter = "") {
       setError("");
 
       // Read in a category query and apply it if needed
-      let query = currFilter;
+      const query = currFilter;
       if (query !== "") {
-        url = `?category=${encodeURIComponent(currFilter)}`
+        query = `?category=${encodeURIComponent(currFilter)}`;
       }
 
       try {
@@ -101,7 +101,7 @@ export function useFlyers(filter = "") {
         ? "We're having trouble connecting. Please try again in a moment."
         : postError.message || "Could not post flyer.";
       setError(message);
-      throw new Error(message);
+      throw new Error(message, { cause: postError });
     } finally {
       setPosting(false);
     }
