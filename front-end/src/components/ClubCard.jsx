@@ -1,33 +1,22 @@
 import { Link } from "react-router-dom";
-import FavoriteButton from "./FavoriteButton";
 
 export default function ClubCard({ club }) {
-  const { isFavorite, toggleFavorite } = useFavorites();
-  const favorite = isFavorite(club.id);
-
   const detailsPath = `/organizations/${club.id}`;
 
   return (
-    <li className="flex items-center gap-4 bg-(--paper) px-4 py-4 shadow-sm inset-shadow-sm">
+    <li className="flex items-center gap-4 bg-(--paper) p-6 shadow-md inset-shadow-sm rounded-2xl">
       <Link to={detailsPath} className="shrink-0">
         <img
           src={club.logo}
           alt=""
-          className="size-14 rounded-full bg-(--paper) object-cover"
+          className="size-16 rounded-full bg-(--paper) object-cover"
         />
       </Link>
-      <div className="min-w-0">
-        <div className="flex items-center gap-0.5">
-          <Link to={detailsPath} className="text-lg font-bold [font-family:var(--font-petrona)]">
-            {club.name}
-          </Link>
-          <FavoriteButton
-            pressed={favorite}
-            label={favorite ? `Remove ${club.name} from favorites` : `Add ${club.name} to favorites`}
-            onClick={() => toggleFavorite(club.id)}
-          />
-        </div>
-        <Link to={detailsPath} className="body-copy">
+      <div className="min-w-0 flex flex-col gap-1">
+        <Link to={detailsPath} className="feature-copy">
+          {club.name}
+        </Link>
+        <Link to={detailsPath} className="body-copy text-(--soft-black)/60">
           {club.description}
         </Link>
       </div>

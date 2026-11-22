@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AddFlyerForm from "../components/AddFlyerForm";
 import { useFlyers } from "../hooks/useFlyers";
+import { useOrgs } from "../hooks/useOrgs";
 
 const primaryButton = "feature-copy flex h-fit w-full p-6 items-center justify-center rounded-xl border border-black/10 bg-white text-base font-semibold shadow-sm active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-(--nyu-indigo)";
 
@@ -29,36 +30,11 @@ export default function AddFlyer() {
   const { addFlyer } = useFlyers();
   // Mock of the user's admin role until accounts come from the back end.
   const [isAdmin, setIsAdmin] = useState(false);
-  const [organizations, setOrganizations] = useState([]);
-  const [loadingOrganizations, setLoadingOrganizations] = useState(false);
-  const [organizationError, setOrganizationError] = useState("");
-
-  useEffect(() => {
-    if (!isAdmin) {return undefined;}
-
-    const controller = new AbortController();
-    async function loadOrganizations() {
-      setLoadingOrganizations(true);
-      setOrganizationError("");
-      try {
-        const response = await fetch("/api/organizations", { signal: controller.signal });
-        const data = await response.json();
-        if (!response.ok || !Array.isArray(data)) {
-          throw new Error("Could not load organizations.");
-        }
-        setOrganizations(data);
-      } catch (error) {
-        if (error.name !== "AbortError") {
-          setOrganizationError(error.message || "Could not load organizations.");
-        }
-      } finally {
-        if (!controller.signal.aborted) {setLoadingOrganizations(false);}
-      }
-    }
-
-    loadOrganizations();
-    return () => controller.abort();
-  }, [isAdmin]);
+  const {
+    organizations,
+    loading: loadingOrganizations,
+    error: organizationError,
+  } = useOrgs({ enabled: isAdmin });
 
   async function handlePost(values) {
     const formData = new FormData();
