@@ -1,14 +1,24 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Flyer from "../components/Flyer";
-import { flyerById } from "../data/flyers";
+import { useFlyers } from "../context/FlyersContext";
 
 export default function FlyerDetails() {
-  /* Grab the id from the URL params */
   const { flyerId } = useParams();
-  /* TODO: Replace with proper backend logic. */
-  const flyer = flyerById(flyerId);
+  const { getFlyer } = useFlyers();
+  const flyer = getFlyer(flyerId);
 
-  return (
-    <Flyer key={flyerId} flyer={flyer} mode="full"/>
-  );
+  if (!flyer) {
+    return (
+      <section className="flex flex-1 flex-col bg-(--parchment) p-8 pb-28 text-(--soft-black) inset-shadow-sm shadow-[0px_-3px_8px_rgba(0,0,0,0.25)] mt-3 rounded-4xl">
+        <div className="mx-auto flex w-full max-w-md flex-col gap-4">
+          <p className="body-copy">This flyer is not available.</p>
+          <Link to="/home" className="body-copy underline underline-offset-4">
+            Back to Main Feed
+          </Link>
+        </div>
+      </section>
+    );
+  }
+
+  return <Flyer key={flyerId} flyer={flyer} mode="full" />;
 }

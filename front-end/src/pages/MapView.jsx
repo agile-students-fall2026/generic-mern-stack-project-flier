@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useFlyers } from "../context/FlyersContext";
+import { flyers as mapFlyers } from "../data/flyers";
 
 export default function MapView() {
-  const { flyers } = useFlyers();
-  const mappedFlyers = flyers.filter((flyer) => flyer.mapPosition);
+  // Map pins still use local seed data (mapPosition) until the API exposes locations.
+  const mappedFlyers = mapFlyers.filter((flyer) => flyer.mapPosition);
   const [selectedId, setSelectedId] = useState(mappedFlyers[0]?.id ?? null);
   const selectedFlyer = mappedFlyers.find((flyer) => flyer.id === selectedId);
 
