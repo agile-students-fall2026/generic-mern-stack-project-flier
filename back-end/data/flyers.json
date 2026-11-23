@@ -5,7 +5,7 @@
     "categories": ["Technical", "Networking", "Food", "Merch"],
     "starts_at": "2026-11-04T12:00:00Z",
     "location": "Bobst Library LL1",
-    "image": "https://picsum.photos/200/300",
+    "image": "https://picsum.photos/id/180/200/300",
     "organizationId": "1",
     "description": "Join us for a Hackathon at Bobst! Free food and merch provided."
   },
@@ -15,7 +15,7 @@
     "categories": ["Technical", "Creative"],
     "starts_at": "2026-11-12T16:00:00Z",
     "location": "Kimmel Center 804",
-    "image": "https://picsum.photos/200/300",
+    "image": "https://picsum.photos/id/160/200/300",
     "organizationId": "1",
     "description": "Join us for a workshop at Kimmel! Free food and merch provided."
   },
@@ -25,7 +25,7 @@
     "categories": ["Creative", "Cultural", "Food", "Merch"],
     "starts_at": "2026-12-04T13:00:00Z",
     "location": "Kimmel Center 910",
-    "image": "https://picsum.photos/200/300",
+    "image": "https://picsum.photos/id/1011/200/300",
     "organizationId": "2",
     "description": "Join us for a club fest at Kimmel! Free food and merch provided."
   },
@@ -35,7 +35,7 @@
     "categories": ["Cultural", "Music", "Food"],
     "starts_at": "2026-11-26T18:00:00Z",
     "location": "Riese Lounge",
-    "image": "https://picsum.photos/200/300",
+    "image": "https://picsum.photos/id/1035/200/300",
     "organizationId": "3",
     "description": "Join us for a cultural festival at the Riese Lounge! Free food and merch provided."
   },
@@ -45,7 +45,7 @@
     "categories": ["Creative", "Networking"],
     "starts_at": "2026-11-12T16:00:00Z",
     "location": "Wasserman Center",
-    "image": "https://picsum.photos/200/300",
+    "image": "https://picsum.photos/id/1027/200/300",
     "organizationId": "4",
     "description": "Take a new headshot at Wasserman!"
   },
@@ -55,7 +55,7 @@
     "categories": ["Networking", "Food"],
     "starts_at": "2026-11-30T20:00:00Z",
     "location": "Bobst Library LL2",
-    "image": "https://picsum.photos/200/300",
+    "image": "https://picsum.photos/id/1012/200/300",
     "organizationId": "5",
     "description": "Join us for a networking event at Bobst! Free food and merch provided."
   }
