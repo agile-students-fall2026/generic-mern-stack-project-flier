@@ -1,6 +1,9 @@
+import fs from 'fs'
+import path from 'path'
 import { use, expect } from 'chai'
 import { default as chaiHttp, request } from 'chai-http'
-import app from '../app.js' 
+import app from '../app.js'
+import { UPLOAD_DIR } from '../middleware/upload.js'
 
 use(chaiHttp)
 
@@ -13,6 +16,12 @@ const validFlyer = {
   organizationId: '1',
   description: 'A test event.',
 }
+
+// A real 1x1 PNG, so we don't need image files checked into the repo.
+const tinyPng = Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+  'base64'
+)
 
 describe('Flier API Routes', () => {
   describe('GET /api/flyers', () => {
@@ -36,6 +45,12 @@ describe('Flier API Routes', () => {
   })
 
   describe('POST /api/flyers', () => {
+    const uploadedFiles = []
+
+    after(() => {
+      uploadedFiles.forEach(name => fs.rmSync(path.join(UPLOAD_DIR, name), { force: true }))
+    })
+
     it('creates a flyer for an existing organization', async () => {
       const res = await request.execute(app).post('/api/flyers').send(validFlyer)
 
@@ -47,6 +62,32 @@ describe('Flier API Routes', () => {
         organizationId: validFlyer.organizationId,
       })
       expect(res.body.flyer.id).to.be.a('string')
+    })
+
+    it('creates a flyer from FormData with image and event fields', async () => {
+      const res = await request
+        .execute(app)
+        .post('/api/flyers')
+        .field('title', 'FormData Event')
+        .field('categories', JSON.stringify(['Technical']))
+        .field('starts_at', '2026-12-11T18:00:00Z')
+        .field('location', 'Kimmel Center')
+        .field('organizationId', '1')
+        .field('description', 'Submitted as multipart FormData.')
+        .attach('image', tinyPng, { filename: 'flyer.png', contentType: 'image/png' })
+
+      expect(res).to.have.status(201)
+      expect(res.body.success).to.equal(true)
+      expect(res.body.flyer).to.include({
+        title: 'FormData Event',
+        organizationId: '1',
+      })
+      expect(res.body.flyer.categories).to.deep.equal(['Technical'])
+      expect(res.body.flyer.image).to.match(/^\/static\/uploads\//)
+
+      const filename = path.basename(res.body.flyer.image)
+      expect(fs.existsSync(path.join(UPLOAD_DIR, filename))).to.equal(true)
+      uploadedFiles.push(filename)
     })
 
     it('returns 400 when required flyer data is missing', async () => {

@@ -5,7 +5,8 @@ import { fileURLToPath } from 'url'
 import morgan from 'morgan'
 import cors from 'cors' 
 import dotenv from 'dotenv'
-import uploadRoutes from './routes/uploads.js'
+import uploadRoutes, { handleUploadErrors } from './routes/uploads.js'
+import { upload, fileUrl } from './middleware/upload.js'
 
 const app = express()
 const __filename = fileURLToPath(import.meta.url)
@@ -32,6 +33,18 @@ app.use('/static', express.static('public'))
 
 // flyer image uploads (Multer)
 app.use('/api/uploads', uploadRoutes)
+
+// FormData sends categories as a JSON string; JSON clients send an array.
+function parseCategories(categories) {
+  if (typeof categories !== 'string') {
+    return categories
+  }
+  try {
+    return JSON.parse(categories)
+  } catch {
+    return categories
+  }
+}
 
 app.get('/', (req, res) => {
   res.send('Flier backend is running!')
@@ -73,9 +86,17 @@ app.get('/api/flyers', (req, res) => {
   }
 })
 
-app.post('/api/flyers', (req, res) => {
+// Accepts JSON or multipart FormData (image file + event fields together).
+app.post('/api/flyers', upload.single('image'), (req, res) => {
   try {
-    const { title, categories, starts_at, location, image, organizationId, description } = req.body ?? {}
+    const body = req.body ?? {}
+    const title = body.title
+    const categories = parseCategories(body.categories)
+    const starts_at = body.starts_at
+    const location = body.location
+    const organizationId = body.organizationId
+    const description = body.description
+    const image = req.file ? fileUrl(req.file) : body.image
 
     // Check for missing fields and throw a 400 if fields are missing
     const fields = { title, categories, starts_at, location, image, organizationId, description }
@@ -153,5 +174,8 @@ app.get('/api/organizations/:id', (req, res) => {
 
   res.status(200).json(organization)
 })
+
+// Multer errors from POST /api/flyers (and any future upload.single usage).
+app.use(handleUploadErrors)
 
 export default app
