@@ -3,6 +3,25 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import AddFlyerForm from "../components/AddFlyerForm";
 import { useFlyers } from "../context/FlyersContext";
 
+// API flyers use starts_at / organizationId; the shared form uses date / time / clubId.
+function toFormValues(flyer) {
+  if (flyer.date && flyer.time) {
+    return flyer;
+  }
+
+  const start = flyer.starts_at ? new Date(flyer.starts_at) : null;
+  const pad = (n) => String(n).padStart(2, "0");
+
+  return {
+    image: flyer.image ?? "",
+    title: flyer.title ?? "",
+    clubId: flyer.organizationId ?? flyer.clubId ?? "",
+    date: start ? `${start.getFullYear()}-${pad(start.getMonth() + 1)}-${pad(start.getDate())}` : "",
+    time: start ? `${pad(start.getHours())}:${pad(start.getMinutes())}` : "",
+    location: flyer.location ?? "",
+  };
+}
+
 function EditFlyerPanel({ flyer }) {
   const location = useLocation();
   const { updateFlyer } = useFlyers();
@@ -17,7 +36,7 @@ function EditFlyerPanel({ flyer }) {
     <AddFlyerForm
       heading="Edit Details"
       submitLabel="Save"
-      initialValues={flyer}
+      initialValues={toFormValues(flyer)}
       onSubmit={handleSave}
       notice={notice}
     />
