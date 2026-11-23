@@ -106,8 +106,9 @@ describe('Flier API Routes', () => {
           expect(err).to.be.null
           expect(res).to.have.status(200)
           expect(res).to.be.json
-          expect(res.body).to.have.property('id').that.equals('1')
-          expect(res.body).to.have.property('name')
+          expect(res.body.success).to.equal(true)
+          expect(res.body.organization).to.have.property('id').that.equals('1')
+          expect(res.body.organization).to.have.property('name')
           done()
         })
     })
@@ -120,9 +121,21 @@ describe('Flier API Routes', () => {
           expect(err).to.be.null
           expect(res).to.have.status(404)
           expect(res).to.be.json
-          expect(res.body).to.have.property('status').that.equals('error')
+          expect(res.body.success).to.equal(false)
+          expect(res.body).to.have.property('message')
           done()
         })
+    })
+  })
+
+  describe('GET /api/organizations', () => {
+    it('returns the organization list in the standard API response shape', async () => {
+      const res = await request.execute(app).get('/api/organizations')
+
+      expect(res).to.have.status(200)
+      expect(res).to.be.json
+      expect(res.body.success).to.equal(true)
+      expect(res.body.organizations).to.be.an('array').that.is.not.empty
     })
   })
 })

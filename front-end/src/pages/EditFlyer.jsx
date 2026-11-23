@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import AddFlyerForm from "../components/AddFlyerForm";
-import { useFlyers } from "../context/FlyersContext";
 
 function EditFlyerPanel({ flyer }) {
   const location = useLocation();

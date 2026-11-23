@@ -9,13 +9,10 @@ import OrganizationView from './pages/OrganizationView';
 import MyOrganizations from './pages/MyOrganizations';
 import ClubDetails from './pages/ClubDetails';
 import Favorites from './pages/Favorites';
-import { FavoritesProvider } from './context/FavoritesContext';
 import CalendarView from './pages/CalendarView';
 import AddFlyer from './pages/AddFlyer';
 import EditFlyer from './pages/EditFlyer';
-import { FlyersProvider } from './context/FlyersContext';
 import FlyerDetails from './pages/FlyerDetails';
-import MapView from './pages/MapView';
 import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
 import Notifications from './pages/Notifications';
@@ -26,8 +23,6 @@ import ForgotPassword from './pages/ForgotPassword';
 export default function App() {
   return (
     <BrowserRouter>
-      <FavoritesProvider>
-      <FlyersProvider>
       <Routes>
         {/* No Header or NavBar */}
         <Route path="/" element={<Landing />} />
@@ -46,7 +41,6 @@ export default function App() {
           <Route path="/add-flyer" element={<AddFlyer />} />
           <Route path="/flyers/:flyerId/edit" element={<EditFlyer />} />
           <Route path="/flyer/:flyerId" element={<FlyerDetails />} />
-          <Route path="/map" element={<MapView />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/notifications" element={<Notifications />} />
@@ -54,8 +48,6 @@ export default function App() {
           <Route path="/support" element={<Support />} />
         </Route>
       </Routes>
-      </FlyersProvider>
-      </FavoritesProvider>
     </BrowserRouter>
   );
 }

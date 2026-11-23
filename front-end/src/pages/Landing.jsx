@@ -1,44 +1,30 @@
 import { Link } from 'react-router-dom';
+import flierLogoTitle from "../assets/flier-logo-title.svg";
+import "./Landing.css";
 
 export default function Landing() {
   return (
-    <main className="min-h-screen w-full bg-(--paper) flex flex-col justify-center p-6 pb-14 text-(--soft-black)">
-
-      <div className="w-full flex flex-col">
-
-        {/* Brand Group */}
-        <div className="flex items-center gap-4 mb-10">
-          <div className="w-14 h-14 border border-(--soft-black)/20 rounded-xl bg-white flex items-center justify-center p-2 shadow-sm">
-            <img
-              src="/flier-logo.svg"
-              alt="Flier logo"
-              className="w-full h-full object-contain"
-            />
-          </div>
-
-          <span className="text-3xl font-azabache text-(--nyu-indigo) tracking-wide">
-            Flier
-          </span>
-        </div>
+    <main className="landing-page h-screen w-full bg-(--parchment) flex flex-col justify-center p-12 text-(--soft-black)">
+      <div className="landing-content w-full h-full flex flex-col justify-end">
+        <img src={flierLogoTitle} alt="Flier logo" className="w-48 -ml-5"/>
 
         {/* Headline */}
-        <h1 className="heading mb-12 max-w-75">
+        <h1 className="heading">
           Ready to fly through the clutter?
         </h1>
 
         {/* Action Buttons */}
-        <div className="flex flex-col gap-5 w-full">
-
+        <div className="flex flex-col gap-4 w-full mt-4">
           <Link
             to="/register"
-            className="w-full py-4 px-4 bg-white hover:bg-(--parchment) text-(--soft-black) font-semibold text-base rounded-xl border border-(--soft-black)/20 shadow-sm text-center transition-colors active:scale-[0.99]"
+            className="feature-copy w-full p-4 bg-(--nyu-indigo) text-(--paper) rounded-xl shadow-md inset-shadow-sm text-center"
           >
             Get Started
           </Link>
 
           <Link
             to="/login"
-            className="w-full py-4 px-4 bg-white hover:bg-(--parchment) text-(--soft-black) font-semibold text-base rounded-xl border border-(--soft-black)/20 shadow-sm text-center transition-colors active:scale-[0.99]"
+            className="feature-copy w-full p-4 bg-(--paper) text-(--soft-black) rounded-xl shadow-md inset-shadow-sm text-center"
           >
             Login
           </Link>

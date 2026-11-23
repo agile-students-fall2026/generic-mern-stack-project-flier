@@ -136,22 +136,31 @@ app.post('/api/users/saved-flyers/:id', (req, res) => {
 })
 
 app.get('/api/organizations', (req, res) => {
-  res.status(200).json(organizations)
+  try {
+    // TODO: Replace in Sprint 3 with proper database query
+    return res.status(200).json({ success: true, organizations })
+  } catch (err) {
+    console.error('GET /api/organizations failed:', err)
+    return res.status(500).json({ success: false, message: 'Something went wrong.' })
+  }
 })
 
 app.get('/api/organizations/:id', (req, res) => {
-  const orgId = req.params.id
+  try {
+    const orgId = req.params.id
 
-  const organization = organizations.find(org => String(org.id) === String(orgId))
+    // TODO: Replace in Sprint 3 with proper database query
+    const organization = organizations.find(org => String(org.id) === String(orgId))
 
-  if (!organization) {
-    return res.status(404).json({
-      status: 'error',
-      message: `Organization #${orgId} not found`,
-    })
+    if (!organization) {
+      return res.status(404).json({ success: false, message: `Organization #${orgId} not found.` })
+    }
+
+    return res.status(200).json({ success: true, organization })
+  } catch (err) {
+    console.error('GET /api/organizations/:id failed:', err)
+    return res.status(500).json({ success: false, message: 'Something went wrong.' })
   }
-
-  res.status(200).json(organization)
 })
 
 export default app

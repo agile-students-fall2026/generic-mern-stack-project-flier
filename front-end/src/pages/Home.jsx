@@ -1,11 +1,14 @@
 import FlyerCarousel from "../components/FlyerCarousel";
+import { useFlyers } from "../hooks/useFlyers";
 
 export default function Home() {
+  const { flyers, loading, error } = useFlyers();
+
   return (
     <div className="flex flex-col bg-(--parchment) h-full w-full pb-28 rounded-4xl p-8 gap-6 inset-shadow-sm shadow-[0px_-3px_8px_rgba(0,0,0,0.25)] mt-3">
-      <FlyerCarousel category="today"/>
-      <FlyerCarousel category="forYou"/>
-      <FlyerCarousel category="new"/>
+      <FlyerCarousel category="today" flyers={flyers} loading={loading} error={error}/>
+      <FlyerCarousel category="forYou" flyers={flyers} loading={loading} error={error}/>
+      <FlyerCarousel category="new" flyers={flyers} loading={loading} error={error}/>
     </div>
   );
 }

@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename)
 export const UPLOAD_DIR = path.join(__dirname, '..', 'public', 'uploads')
 const UPLOAD_URL_PREFIX = '/static/uploads'
 
-export const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5 MB
+export const MAX_FILE_SIZE = 25 * 1024 * 1024 // 25 MB
 export const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
 
 fs.mkdirSync(UPLOAD_DIR, { recursive: true })
@@ -28,7 +28,7 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => cb(null, makeFilename(file.originalname)),
 })
 
-// Only accept image types the front-end can display.
+// Only accept image types the front-end can preview and display.
 export function imageFileFilter(req, file, cb) {
   if (ALLOWED_TYPES.includes(file.mimetype)) {
     cb(null, true)

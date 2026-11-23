@@ -1,195 +1,134 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import arrowBack from "../assets/arrow-back-40px.svg";
-import { clubs } from "../data/clubs";
+import arrowBack from "../assets/arrow-back-40px-black.svg";
+import CustomDropdown from "./CustomDropdown";
+import DateTimeFields from "./DateTimeFields";
+import FlyerFileUpload from "./FlyerFileUpload";
+import { localDateTimeToIso } from "../utils/flyerDate";
 
-const emptyFlyer = {
-  image: "",
-  title: "",
-  clubId: "",
-  date: "",
-  time: "",
-  location: "",
-};
+/* Used for data entry validation & restrictions */
+const CATEGORIES = ["Technical", "Creative", "Networking", "Cultural", "Music", "Food", "Merch"];
+const LOCATION_OPTIONS = [
+  "Kimmel Center",
+  "Bobst Library",
+  "Tisch (721 Broadway)",
+  "Global Center for Academic and Spiritual Life (GCASL)",
+  "370 Jay Street",
+];
+/* Shared TailwindCSS styles in the form */
+const labelClass = "flex flex-col feature-copy text-(--soft-black) gap-2";
+const inputClass = "w-full rounded-2xl px-4 py-3 bg-(--paper) inset-shadow-sm shadow-md body-copy";
 
-const inputClass =
-  "mt-1.5 w-full rounded-md border border-black/10 bg-white px-3.5 py-2.5 text-sm outline-none focus-visible:ring-2 focus-visible:ring-(--nyu-indigo)";
-const labelClass = "body-copy text-sm font-medium";
-
-// Shared by Add Flyer and Edit Flyer: the wireframes use the same form for both.
-export default function AddFlyerForm({ heading, submitLabel, initialValues = emptyFlyer, onSubmit, notice }) {
+/* 
+ * Takes the list of organizations and an onSubmit handler as parameters.
+ * Organizations are passed to render the possible options in a dropdown and for ID assignment.
+*/
+export default function AddFlyerForm({ organizations = [], onSubmit }) {
   const navigate = useNavigate();
-  const [values, setValues] = useState({ ...emptyFlyer, ...initialValues });
-  const [imageError, setImageError] = useState("");
+  const [inputs, setInputs] = useState({
+    title: "",
+    categories: [],
+    location: "",
+    organizationId: "",
+    description: "",
+  });
+  /* Separated date and time fields since they need to be parsed into an ISO timestamp */
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+  const [formError, setFormError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  function goBack() {
-    if (window.history.state && window.history.state.idx > 0) {
-      navigate(-1);
-      return;
-    }
-    navigate("/home");
-  }
-
+  /* Helper to update what the backend should receive as form inputs change. */
   function setField(name, value) {
-    setValues((current) => ({ ...current, [name]: value }));
+    setInputs((current) => ({ ...current, [name]: value }));
   }
 
-  function handleImageChange(e) {
-    const file = e.target.files[0];
-    if (!file) {
-      return;
-    }
-    setField("image", URL.createObjectURL(file));
-    setImageError("");
-  }
-
-  function handleSubmit(e) {
+  /* Data validation before passing off to backend with the provided onSubmit. */
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (!values.image) {
-      setImageError("Please upload a flyer image.");
-      return;
+    setFormError("");
+
+    const startsAt = localDateTimeToIso(date, time);
+    // Error handling: bad file type, no organization or categories chosen, and no time input
+    if (!imageFile) {return setFormError("Please upload a flyer image.");}
+    if (!inputs.organizationId) {return setFormError("Choose an organization.");}
+    if (inputs.categories.length === 0) {return setFormError("Choose at least one category.");}
+    if (!inputs.location) {return setFormError("Enter a location.");}
+    if (!startsAt) {return setFormError("Pick a valid date and time.");}
+
+    setSubmitting(true);
+    try {
+      await onSubmit({ ...inputs, starts_at: startsAt, imageFile });
+    } catch (error) {
+      setFormError(error.message || "Could not post flyer.");
+    } finally {
+      setSubmitting(false);
     }
-    onSubmit(values);
   }
 
   return (
-    <>
-      <div className="mx-auto flex w-full max-w-md flex-col p-8 pb-28">
-        <div className="flex items-center justify-between gap-3">
-          <h1 className="heading">{heading}</h1>
-          <button
-            type="button"
-            onClick={goBack}
-            aria-label="Back"
-            className="flex size-10 shrink-0 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-(--nyu-indigo)"
-          >
-            <img src={arrowBack} alt="" className="size-8 brightness-0" />
-          </button>
-        </div>
-
-        {notice && (
-          <p
-            role="status"
-            className="body-copy mt-4 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-(--nyu-indigo) shadow-sm ring-1 ring-black/5"
-          >
-            {notice}
-          </p>
-        )}
-
-        <form onSubmit={handleSubmit} className="mt-5 flex flex-col gap-2">
-          <div>
-            <label
-              className={`flex cursor-pointer flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed bg-white text-center shadow-sm focus-within:ring-2 focus-within:ring-(--nyu-indigo) ${
-                imageError ? "border-red-700/60" : "border-black/15"
-              } ${values.image ? "p-2" : "h-40"}`}
-            >
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="sr-only"
-              />
-              {values.image ? (
-                <>
-                  <img
-                    src={values.image}
-                    alt="Flyer preview"
-                    className="max-h-80 w-full rounded-xl bg-(--paper) object-contain"
-                  />
-                  <span className="body-copy py-2 text-sm underline underline-offset-4">
-                    Change image
-                  </span>
-                </>
-              ) : (
-                <span className="body-copy font-semibold">Upload Image*</span>
-              )}
-            </label>
-            {imageError && (
-              <p role="alert" className="body-copy mt-1.5 text-sm text-red-700">
-                {imageError}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="flyer-title" className={labelClass}>Title*</label>
-            <input
-              id="flyer-title"
-              type="text"
-              value={values.title}
-              onChange={(e) => setField("title", e.target.value)}
-              placeholder="Event name"
-              className={inputClass}
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="flyer-club" className={labelClass}>Club*</label>
-            <select
-              id="flyer-club"
-              value={values.clubId}
-              onChange={(e) => setField("clubId", e.target.value)}
-              className={inputClass}
-              required
-            >
-              <option value="" disabled>
-                Choose a club
-              </option>
-              {clubs.map((club) => (
-                <option key={club.id} value={club.id}>
-                  {club.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label htmlFor="flyer-date" className={labelClass}>Date*</label>
-              <input
-                id="flyer-date"
-                type="date"
-                value={values.date}
-                onChange={(e) => setField("date", e.target.value)}
-                className={inputClass}
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="flyer-time" className={labelClass}>Time*</label>
-              <input
-                id="flyer-time"
-                type="time"
-                value={values.time}
-                onChange={(e) => setField("time", e.target.value)}
-                className={inputClass}
-                required
-              />
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="flyer-location" className={labelClass}>Location*</label>
-            <input
-              id="flyer-location"
-              type="text"
-              value={values.location}
-              onChange={(e) => setField("location", e.target.value)}
-              placeholder="Begin typing an address..."
-              className={inputClass}
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="body-copy mt-4 flex h-12 w-full items-center justify-center rounded-xl border border-black/10 bg-white text-base font-semibold shadow-sm active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-(--nyu-indigo)"
-          >
-            {submitLabel}
-          </button>
-        </form>
+    <div className="mx-auto flex w-full max-w-md flex-col p-8 pb-28">
+      <div className="flex items-center justify-between">
+        <h1 className="heading text-(--soft-black)">Add a Flyer</h1>
+        <button
+          type="button"
+          onClick={() => navigate("/home")}
+          aria-label="Back"
+          className="flex items-center justify-center focus-visible:outline-2 focus-visible:outline-(--nyu-indigo)"
+        >
+          <img src={arrowBack} alt="" className="size-8" />
+        </button>
       </div>
-    </>
+
+      <form onSubmit={handleSubmit} className="mt-4 flex flex-col gap-4">
+        <FlyerFileUpload file={imageFile} onChange={setImageFile} />
+
+        <label className={labelClass}>
+          Title*
+          <input type="text" value={inputs.title} onChange={(e) => setField("title", e.target.value)} className={inputClass} placeholder="Event name" required />
+        </label>
+
+        <CustomDropdown
+          fieldLabel="Organization*"
+          label="Choose an organization"
+          options={organizations.map((org) => ({ value: String(org.id), label: org.name }))}
+          value={inputs.organizationId}
+          onChange={(value) => setField("organizationId", value)}
+          placeholder="Choose an organization"
+        />
+
+        <CustomDropdown
+          fieldLabel="Categories* (choose one or more)"
+          label="Choose flyer categories"
+          options={CATEGORIES.map((category) => ({ value: category, label: category }))}
+          value={inputs.categories}
+          onChange={(value) => setField("categories", value)}
+          placeholder="Choose categories"
+          multiple
+        />
+
+        <DateTimeFields date={date} time={time} onDateChange={setDate} onTimeChange={setTime} />
+
+        <CustomDropdown
+          fieldLabel="Location*"
+          label="Choose a location"
+          options={LOCATION_OPTIONS.map((locationOption) => ({ value: locationOption, label: locationOption }))}
+          value={inputs.location}
+          onChange={(value) => setField("location", value)}
+          placeholder="Choose a location"
+        />
+
+        <label className={labelClass}>
+          Description*
+          <textarea value={inputs.description} onChange={(e) => setField("description", e.target.value)} className={inputClass} rows={4} placeholder="The next big event!" required />
+        </label>
+
+        {formError && <p role="alert" className="body-copy text-sm text-red-700">{formError}</p>}
+        <button type="submit" disabled={submitting} className="subheading mt-2 flex w-full items-center justify-center rounded-2xl py-2 bg-(--nyu-indigo) text-(--paper) shadow-md disabled:opacity-60 inset-shadow-sm">
+          {submitting ? "Posting…" : "Post!"}
+        </button>
+      </form>
+    </div>
   );
 }

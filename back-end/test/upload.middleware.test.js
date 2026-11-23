@@ -27,8 +27,8 @@ describe('Upload middleware', () => {
       })
     })
 
-    it('rejects non-image files with an INVALID_FILE_TYPE error', () => {
-      imageFileFilter({}, { mimetype: 'application/pdf' }, err => {
+    it('rejects unsupported files with an INVALID_FILE_TYPE error', () => {
+      imageFileFilter({}, { mimetype: 'text/plain' }, err => {
         expect(err).to.be.an('error')
         expect(err.code).to.equal('INVALID_FILE_TYPE')
       })
@@ -66,7 +66,7 @@ describe('Upload middleware', () => {
       const err = Object.assign(new Error('too big'), { code: 'LIMIT_FILE_SIZE' })
       handleUploadErrors(err, {}, res, () => {})
       expect(res.statusCode).to.equal(413)
-      expect(res.body.error).to.include('5 MB')
+      expect(res.body.error).to.include('25 MB')
     })
 
     it('passes unrelated errors on to Express', () => {

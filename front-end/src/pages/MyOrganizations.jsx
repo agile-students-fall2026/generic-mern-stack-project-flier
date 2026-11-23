@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import arrowBack from "../assets/arrow-back-40px.svg";
 import ClubCard from "../components/ClubCard";
-import { clubs } from "../data/clubs";
 
 export default function MyOrganizations() {
   const adminClubs = clubs.filter((club) => club.isAdmin);

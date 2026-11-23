@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AddFlyerForm from "../components/AddFlyerForm";
-import { useFlyers } from "../context/FlyersContext";
+import { useFlyers } from "../hooks/useFlyers";
+import { useOrgs } from "../hooks/useOrgs";
 
 const primaryButton = "feature-copy flex h-fit w-full p-6 items-center justify-center rounded-xl border border-black/10 bg-white text-base font-semibold shadow-sm active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-(--nyu-indigo)";
 
@@ -29,10 +30,24 @@ export default function AddFlyer() {
   const { addFlyer } = useFlyers();
   // Mock of the user's admin role until accounts come from the back end.
   const [isAdmin, setIsAdmin] = useState(false);
+  const {
+    organizations,
+    loading: loadingOrganizations,
+    error: organizationError,
+  } = useOrgs({ enabled: isAdmin });
 
-  function handlePost(values) {
-    const id = addFlyer(values);
-    navigate(`/flyers/${id}/edit`, { state: { notice: "Flyer posted!" } });
+  async function handlePost(values) {
+    const formData = new FormData();
+    formData.append("image", values.imageFile);
+    const uploadResponse = await fetch("/api/uploads", { method: "POST", body: formData });
+    const uploadData = await uploadResponse.json();
+    if (!uploadResponse.ok || !uploadData.url) {
+      throw new Error(uploadData.error || "Could not upload flyer file.");
+    }
+
+    const { imageFile, ...flyer } = values;
+    const createdFlyer = await addFlyer({ ...flyer, image: uploadData.url });
+    navigate(`/flyer/${createdFlyer.id}`);
   }
 
   return (
@@ -49,7 +64,13 @@ export default function AddFlyer() {
       </div>
 
       {isAdmin ? (
-        <AddFlyerForm heading="Add a Flyer" submitLabel="Post!" onSubmit={handlePost} />
+        loadingOrganizations ? (
+          <p className="body-copy p-8">Loading organizations…</p>
+        ) : organizationError ? (
+          <p role="alert" className="body-copy p-8">{organizationError}</p>
+        ) : (
+          <AddFlyerForm mode="add" organizations={organizations} onSubmit={handlePost} />
+        )
       ) : (
         <section className="flex flex-1 flex-col p-8 text-(--soft-black) justify-center">
           <div className="mx-auto w-full max-w-md">

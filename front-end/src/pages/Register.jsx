@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import flierLogoTitle from "../assets/flier-logo-title.svg";
+import arrowBack from "../assets/arrow-back-40px-black.svg";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -11,31 +13,26 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   return (
-    <div className="flex min-h-screen flex-col bg-white text-(--soft-black)">
-      <div className="flex items-center justify-center gap-3 py-8">
-        <div className="flex size-14 items-center justify-center rounded-2xl border border-black/10 bg-white p-2 shadow-sm">
-          <img src="/flier-logo.svg" alt="Flier logo" className="size-full object-contain" />
-        </div>
-        <span className="font-azabache text-3xl text-(--nyu-indigo)">Flier</span>
+    <div className="flex min-h-screen flex-col bg-(--paper) text-(--soft-black)">
+      <div className="flex justify-center py-4">
+        <img src={flierLogoTitle} alt="Flier logo" className="w-48"/>
       </div>
 
-      <div className="flex flex-1 flex-col items-center rounded-t-3xl border-t border-black/5 bg-(--parchment) px-6 pt-7 pb-16">
-        <div className="flex w-full max-w-sm flex-1 flex-col justify-between">
-          <div>
-            <div className="mb-6 flex items-center justify-between">
-              <h1 className="heading text-xl font-bold">Create an Account</h1>
-              <Link to="/" className="text-(--soft-black)">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="size-5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
-                </svg>
+      <div className="flex flex-1 flex-col items-center rounded-t-4xl bg-(--parchment) inset-shadow-sm shadow-[0px_-3px_8px_rgba(0,0,0,0.25)] p-8">
+        <div className="flex w-full flex-1 flex-col justify-between">
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <h1 className="heading text-(--soft-black)">Create an Account</h1>
+              <Link to="/">
+                <img src={arrowBack} alt="Back arrow" className="size-8" />
               </Link>
             </div>
 
             <form onSubmit={(e) => { e.preventDefault(); navigate("/home"); }} className="flex flex-col gap-4">
-              <div>
-                <label className="body-copy text-sm font-medium">I am a...</label>
-                <div className="mt-2 grid grid-cols-2 gap-3">
-                  <label className="flex h-11 cursor-pointer items-center gap-2 rounded-xl border border-black/10 bg-white px-3 text-sm">
+              <div className="flex flex-col gap-2 text-(--soft-black)">
+                <label className="feature-copy">I am a...</label>
+                <div className="flex flex-row gap-2">
+                  <label className="flex w-full cursor-pointer items-center gap-2 rounded-xl bg-(--paper) px-4 py-3 body-copy">
                     <input
                       type="radio"
                       name="accountType"
@@ -46,7 +43,7 @@ export default function Register() {
                     Student
                   </label>
 
-                  <label className="flex h-11 cursor-pointer items-center gap-2 rounded-xl border border-black/10 bg-white px-3 text-sm">
+                  <label className="flex w-full cursor-pointer items-center gap-2 rounded-xl bg-(--paper) px-4 py-3 body-copy">
                     <input
                       type="radio"
                       name="accountType"
@@ -59,58 +56,54 @@ export default function Register() {
                 </div>
               </div>
 
-              <div>
-                <label className="body-copy text-sm font-medium">Username</label>
-                <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="mt-1.5 w-full rounded-md border border-black/10 bg-white px-3.5 py-2.5 text-sm outline-none"
-                />
-              </div>
+              <label className="feature-copy">Username</label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Username"
+                className="w-full rounded-xl bg-(--paper) px-4 py-3 inset-shadow-sm shadow-md body-copy -mt-2"
+              />
 
-              <div>
-                <label className="body-copy text-sm font-medium">Email</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="mt-1.5 w-full rounded-md border border-black/10 bg-white px-3.5 py-2.5 text-sm outline-none"
-                />
-              </div>
+              <label className="feature-copy">Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="nyu-student@nyu.edu"
+                className="w-full rounded-xl bg-(--paper) px-4 py-3 inset-shadow-sm shadow-md body-copy -mt-2"
+              />
 
-              <div>
-                <label className="body-copy text-sm font-medium">Password</label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="mt-1.5 w-full rounded-md border border-black/10 bg-white px-3.5 py-2.5 text-sm outline-none"
-                />
-              </div>
+              <label className="feature-copy">Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                className="w-full rounded-xl bg-(--paper) px-4 py-3 inset-shadow-sm shadow-md body-copy -mt-2"
+              />
 
-              <div>
-                <label className="body-copy text-sm font-medium">Confirm Password</label>
-                <input
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="mt-1.5 w-full rounded-md border border-black/10 bg-white px-3.5 py-2.5 text-sm outline-none"
-                />
-              </div>
+              <label className="feature-copy">Confirm Password</label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm password"
+                className="w-full rounded-xl bg-(--paper) px-4 py-3 inset-shadow-sm shadow-md body-copy -mt-2"
+              />
             </form>
           </div>
 
-          <div className="mt-8 flex flex-col gap-3 pb-4">
+          <div className="flex flex-col gap-4">
             <button
               type="submit"
               onClick={() => navigate("/home")}
-              className="body-copy flex h-12 w-full items-center justify-center rounded-xl border border-black/10 bg-white text-base font-semibold shadow-sm active:scale-[0.99]"
+              className="feature-copy text-(--paper) flex w-full py-4 items-center justify-center rounded-xl bg-(--nyu-indigo) shadow-md active:scale-[0.99]"
             >
               Register
             </button>
-            <div className="text-center text-sm opacity-75">
-              Already have an account? <Link to="/login" className="font-semibold text-(--nyu-indigo) underline">Log in</Link>
+            <div className="text-center body-copy">
+              Already have an account? <Link to="/login" className="text-(--nyu-indigo) underline">Log In</Link>
             </div>
           </div>
         </div>

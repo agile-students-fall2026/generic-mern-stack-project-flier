@@ -5,7 +5,7 @@ import { upload, fileUrl, MAX_FILE_SIZE } from '../middleware/upload.js'
 const router = express.Router()
 
 // POST /api/uploads
-// Send multipart/form-data with the image in a field named "image".
+// Send multipart/form-data with an image in a field named "image".
 // Responds with the URL to store on the flyer (e.g. flyer.image).
 router.post('/', upload.single('image'), (req, res) => {
   if (!req.file) {
