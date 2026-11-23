@@ -67,6 +67,91 @@ describe('Flier API Routes', () => {
     })
   })
 
+  describe('GET /api/flyers/:id', () => {
+    it('returns a single flyer by id', async () => {
+      const res = await request.execute(app).get('/api/flyers/1')
+
+      expect(res).to.have.status(200)
+      expect(res).to.be.json
+      expect(res.body.success).to.equal(true)
+      expect(res.body.flyer).to.include({ id: '1' })
+      expect(res.body.flyer).to.have.property('title')
+      expect(res.body.flyer).to.have.property('location')
+      expect(res.body.flyer).to.have.property('organizationName').that.is.a('string')
+    })
+
+    it('returns 404 when the flyer does not exist', async () => {
+      const res = await request.execute(app).get('/api/flyers/invalid')
+
+      expect(res).to.have.status(404)
+      expect(res.body.success).to.equal(false)
+      expect(res.body.message).to.equal('Flyer not found.')
+    })
+  })
+
+  describe('PUT /api/flyers/:id', () => {
+    it('updates an existing flyer and keeps untouched fields', async () => {
+      const before = await request.execute(app).get('/api/flyers/2')
+      const originalDescription = before.body.flyer.description
+
+      const res = await request.execute(app).put('/api/flyers/2').send({
+        title: 'Updated Express Workshop',
+        location: 'Kimmel Center',
+      })
+
+      expect(res).to.have.status(200)
+      expect(res).to.be.json
+      expect(res.body.success).to.equal(true)
+      expect(res.body.flyer).to.include({
+        id: '2',
+        title: 'Updated Express Workshop',
+        location: 'Kimmel Center',
+        description: originalDescription,
+      })
+      expect(res.body.flyer).to.have.property('organizationName')
+    })
+
+    it('moves a flyer to another organization', async () => {
+      const res = await request.execute(app).put('/api/flyers/5').send({
+        organizationId: '2',
+      })
+
+      expect(res).to.have.status(200)
+      expect(res.body.success).to.equal(true)
+      expect(res.body.flyer).to.include({ id: '5', organizationId: '2' })
+      expect(res.body.flyer.organizationName).to.equal('NYU Design Collective')
+    })
+
+    it('returns 400 when no flyer fields are provided', async () => {
+      const res = await request.execute(app).put('/api/flyers/1').send({})
+
+      expect(res).to.have.status(400)
+      expect(res.body.success).to.equal(false)
+    })
+
+    it('returns 400 when starts_at is invalid', async () => {
+      const res = await request.execute(app).put('/api/flyers/1').send({ starts_at: 'not-a-date' })
+
+      expect(res).to.have.status(400)
+      expect(res.body.success).to.equal(false)
+    })
+
+    it('returns 404 when the flyer does not exist', async () => {
+      const res = await request.execute(app).put('/api/flyers/invalid').send({ title: 'Nope' })
+
+      expect(res).to.have.status(404)
+      expect(res.body.success).to.equal(false)
+    })
+
+    it('returns 404 when the organization does not exist', async () => {
+      const res = await request.execute(app).put('/api/flyers/1').send({ organizationId: '999' })
+
+      expect(res).to.have.status(404)
+      expect(res.body.success).to.equal(false)
+      expect(res.body.message).to.equal('Organization not found.')
+    })
+  })
+
   describe('POST /api/users/saved-flyers/:id', () => {
     it('should respond with HTTP 201 and confirm the flyer was saved', done => {
       request
