@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import arrowBack from "../assets/arrow-back-40px.svg";
 import { clubs } from "../data/clubs";
+import { apiGet } from "../api";
 
 const emptyFlyer = {
   image: "",
@@ -20,7 +21,23 @@ const labelClass = "body-copy text-sm font-medium";
 export default function AddFlyerForm({ heading, submitLabel, initialValues = emptyFlyer, onSubmit, notice }) {
   const navigate = useNavigate();
   const [values, setValues] = useState({ ...emptyFlyer, ...initialValues });
+  const [imageFile, setImageFile] = useState(null);
   const [imageError, setImageError] = useState("");
+  const [submitError, setSubmitError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [organizations, setOrganizations] = useState(clubs);
+
+  useEffect(() => {
+    apiGet("/api/organizations")
+      .then((data) => {
+        if (Array.isArray(data) && data.length) {
+          setOrganizations(data);
+        }
+      })
+      .catch(() => {
+        // Keep the local clubs fallback if the organizations route is down.
+      });
+  }, []);
 
   function goBack() {
     if (window.history.state && window.history.state.idx > 0) {
@@ -39,17 +56,27 @@ export default function AddFlyerForm({ heading, submitLabel, initialValues = emp
     if (!file) {
       return;
     }
+    setImageFile(file);
     setField("image", URL.createObjectURL(file));
     setImageError("");
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     if (!values.image) {
       setImageError("Please upload a flyer image.");
       return;
     }
-    onSubmit(values);
+
+    setSubmitting(true);
+    setSubmitError("");
+    try {
+      await onSubmit({ ...values, imageFile });
+    } catch (err) {
+      setSubmitError(err.message || "Something went wrong.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -136,7 +163,7 @@ export default function AddFlyerForm({ heading, submitLabel, initialValues = emp
               <option value="" disabled>
                 Choose a club
               </option>
-              {clubs.map((club) => (
+              {organizations.map((club) => (
                 <option key={club.id} value={club.id}>
                   {club.name}
                 </option>
@@ -182,11 +209,18 @@ export default function AddFlyerForm({ heading, submitLabel, initialValues = emp
             />
           </div>
 
+          {submitError && (
+            <p role="alert" className="body-copy text-sm text-red-700">
+              {submitError}
+            </p>
+          )}
+
           <button
             type="submit"
-            className="body-copy mt-4 flex h-12 w-full items-center justify-center rounded-xl border border-black/10 bg-white text-base font-semibold shadow-sm active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-(--nyu-indigo)"
+            disabled={submitting}
+            className="body-copy mt-4 flex h-12 w-full items-center justify-center rounded-xl border border-black/10 bg-white text-base font-semibold shadow-sm active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-(--nyu-indigo) disabled:opacity-60"
           >
-            {submitLabel}
+            {submitting ? "Posting..." : submitLabel}
           </button>
         </form>
       </div>

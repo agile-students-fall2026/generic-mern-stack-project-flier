@@ -30,8 +30,8 @@ export default function AddFlyer() {
   // Mock of the user's admin role until accounts come from the back end.
   const [isAdmin, setIsAdmin] = useState(false);
 
-  function handlePost(values) {
-    const id = addFlyer(values);
+  async function handlePost(values) {
+    const id = await addFlyer(values);
     navigate(`/flyers/${id}/edit`, { state: { notice: "Flyer posted!" } });
   }
 
