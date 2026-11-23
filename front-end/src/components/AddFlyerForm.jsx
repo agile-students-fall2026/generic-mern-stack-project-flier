@@ -23,18 +23,20 @@ const inputClass = "w-full rounded-2xl px-4 py-3 bg-(--paper) inset-shadow-sm sh
  * Takes the list of organizations and an onSubmit handler as parameters.
  * Organizations are passed to render the possible options in a dropdown and for ID assignment.
 */
-export default function AddFlyerForm({ organizations = [], onSubmit }) {
+export default function AddFlyerForm({ organizations = [], onSubmit, mode = "add", heading, submitLabel, notice = "", initialValues }) {
   const navigate = useNavigate();
+  const initialDate = initialValues?.starts_at ? new Date(initialValues.starts_at) : null;
   const [inputs, setInputs] = useState({
     title: "",
     categories: [],
     location: "",
     organizationId: "",
     description: "",
+    ...(initialValues || {}),
   });
   /* Separated date and time fields since they need to be parsed into an ISO timestamp */
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
+  const [date, setDate] = useState(initialDate && !Number.isNaN(initialDate.getTime()) ? [initialDate.getFullYear(), String(initialDate.getMonth() + 1).padStart(2, "0"), String(initialDate.getDate()).padStart(2, "0")].join("-") : "");
+  const [time, setTime] = useState(initialDate && !Number.isNaN(initialDate.getTime()) ? [String(initialDate.getHours()).padStart(2, "0"), String(initialDate.getMinutes()).padStart(2, "0")].join(":") : "");
   const [imageFile, setImageFile] = useState(null);
   const [formError, setFormError] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -51,7 +53,7 @@ export default function AddFlyerForm({ organizations = [], onSubmit }) {
 
     const startsAt = localDateTimeToIso(date, time);
     // Error handling: bad file type, no organization or categories chosen, and no time input
-    if (!imageFile) {return setFormError("Please upload a flyer image.");}
+    if (mode === "add" && !imageFile) {return setFormError("Please upload a flyer image.");}
     if (!inputs.organizationId) {return setFormError("Choose an organization.");}
     if (inputs.categories.length === 0) {return setFormError("Choose at least one category.");}
     if (!inputs.location) {return setFormError("Enter a location.");}
@@ -59,7 +61,7 @@ export default function AddFlyerForm({ organizations = [], onSubmit }) {
 
     setSubmitting(true);
     try {
-      await onSubmit({ ...inputs, starts_at: startsAt, imageFile });
+      await onSubmit({ ...inputs, starts_at: startsAt, imageFile, image: inputs.image });
     } catch (error) {
       setFormError(error.message || "Could not post flyer.");
     } finally {
@@ -70,7 +72,7 @@ export default function AddFlyerForm({ organizations = [], onSubmit }) {
   return (
     <div className="mx-auto flex w-full max-w-md flex-col p-8 pb-28">
       <div className="flex items-center justify-between">
-        <h1 className="heading text-(--soft-black)">Add a Flyer</h1>
+        <h1 className="heading text-(--soft-black)">{heading || (mode === "edit" ? "Edit Flyer" : "Add a Flyer")}</h1>
         <button
           type="button"
           onClick={() => navigate("/home")}
@@ -124,9 +126,9 @@ export default function AddFlyerForm({ organizations = [], onSubmit }) {
           <textarea value={inputs.description} onChange={(e) => setField("description", e.target.value)} className={inputClass} rows={4} placeholder="The next big event!" required />
         </label>
 
-        {formError && <p role="alert" className="body-copy text-sm text-red-700">{formError}</p>}
+        {(formError || notice) && <p role={formError ? "alert" : "status"} className="body-copy text-sm text-red-700">{formError || notice}</p>}
         <button type="submit" disabled={submitting} className="subheading mt-2 flex w-full items-center justify-center rounded-2xl py-2 bg-(--nyu-indigo) text-(--paper) shadow-md disabled:opacity-60 inset-shadow-sm">
-          {submitting ? "Posting…" : "Post!"}
+          {submitting ? "Saving…" : submitLabel || (mode === "edit" ? "Save" : "Post!")}
         </button>
       </form>
     </div>
