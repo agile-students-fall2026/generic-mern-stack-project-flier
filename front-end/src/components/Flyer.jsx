@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import arrowBack from "../assets/arrow-back-40px.svg";
+import FavoriteButton from "./FavoriteButton";
 
 /**
  * Takes in two props: flyer and mode.
@@ -12,7 +13,7 @@ import arrowBack from "../assets/arrow-back-40px.svg";
  * - "carousel" means that only image should be rendered since it is appearing in a carousel (home/calendar).
  * - "full" means that we're looking at the flyer's full details. Provide every relevant piece of info.
  */
-export default function Flyer({ flyer, mode }) {
+export default function Flyer({ flyer, mode, isFavorite, onToggleFavorite, favoriteError }) {
   const navigate = useNavigate();
 
   /* Format the date and time to be easily human readable */
@@ -41,7 +42,18 @@ export default function Flyer({ flyer, mode }) {
             <h1 className="heading py-2 max-w-full wrap-break-word">{flyer.title}</h1>
             <div className="flex items-center gap-2 bg-(--nyu-indigo) w-fit h-full px-4 py-2 justify-center">
               <p className="feature-copy">{flyer.organizationName}</p>
+              {onToggleFavorite ? (
+                <FavoriteButton
+                  isFavorite={isFavorite}
+                  onToggle={onToggleFavorite}
+                  orgName={flyer.organizationName}
+                  className="text-(--paper)"
+                />
+              ) : null}
             </div>
+            {favoriteError ? (
+              <p role="alert" className="body-copy">{favoriteError}</p>
+            ) : null}
           </div>
         </div>
 

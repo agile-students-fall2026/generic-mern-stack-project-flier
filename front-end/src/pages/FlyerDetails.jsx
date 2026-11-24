@@ -1,12 +1,18 @@
 import { Link, useParams } from "react-router-dom";
 import Flyer from "../components/Flyer";
 import { useFlyer } from "../hooks/useFlyer";
+import { useFavorites } from "../hooks/useFavorites";
 import { EmptyState, ErrorState, LoadingState } from "../components/LoadingState";
 
 export default function FlyerDetails() {
   /* Grab the id from the URL params */
   const { flyerId } = useParams();
   const { flyer, loading, error } = useFlyer(flyerId);
+  const {
+    isFavorite,
+    toggleFavorite,
+    error: favoritesError,
+  } = useFavorites();
 
   if (loading || error || !flyer) {
     return (
@@ -20,6 +26,13 @@ export default function FlyerDetails() {
   }
 
   return (
-    <Flyer key={flyerId} flyer={flyer} mode="full"/>
+    <Flyer
+      key={flyerId}
+      flyer={flyer}
+      mode="full"
+      isFavorite={isFavorite(flyer.organizationId)}
+      onToggleFavorite={() => toggleFavorite(flyer.organizationId)}
+      favoriteError={favoritesError}
+    />
   );
 }

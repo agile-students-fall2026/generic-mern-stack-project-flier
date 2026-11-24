@@ -2,10 +2,17 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import arrowBack from "../assets/arrow-back-40px.svg";
 import { useOrgs } from "../hooks/useOrgs";
+import { useFavorites } from "../hooks/useFavorites";
+import FavoriteButton from "../components/FavoriteButton";
 import { EmptyState, ErrorState, LoadingState } from "../components/LoadingState";
 
 function ClubDetailPanel({ club }) {
   const [adminRequested, setAdminRequested] = useState(false);
+  const {
+    isFavorite,
+    toggleFavorite,
+    error: favoritesError,
+  } = useFavorites();
 
   return (
     <section className="flex flex-1 flex-col bg-(--parchment) p-8 pb-26 text-(--soft-black) rounded-4xl inset-shadow-sm shadow-[0px_-3px_8px_rgba(0,0,0,0.25)] mt-3">
@@ -25,9 +32,17 @@ function ClubDetailPanel({ club }) {
           </Link>
         </div>
 
-        <div className="mt-6 flex items-center justify-center">
-          <h1 className="heading text-center">{club.name}</h1>
+        <div className="mt-6 flex w-full flex-wrap items-center justify-center gap-2">
+          <h1 className="heading max-w-full text-center">{club.name}</h1>
+          <FavoriteButton
+            isFavorite={isFavorite(club.id)}
+            onToggle={() => toggleFavorite(club.id)}
+            orgName={club.name}
+          />
         </div>
+        {favoritesError ? (
+          <p role="alert" className="body-copy mt-2 text-center">{favoritesError}</p>
+        ) : null}
         <a
           href={`mailto:${club.email}`}
           className="body-copy mt-2 underline underline-offset-4"
