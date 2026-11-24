@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
-import server from './app.js'
+import server from './app.js';
 
-const port = 3000
+const port = 3000;
 
 const listener = server.listen(port, function () {
-  console.log(`Server running on port: ${port}`)
-})
+  console.log(`Server running on port: ${port}`);
+});
 
 const close = () => {
-  listener.close()
-}
+  listener.close();
+};
 
-export { close }
+export { close };
