@@ -16,7 +16,7 @@ const mockUser = {
 const accountItems = [
   { label: "Edit Profile Information", icon: editIcon, to: "/edit-profile" },
   { label: "My Organizations", icon: groupIcon, to: "/my-organizations" },
-  { label: "Favorites", icon: starIcon, to: "/favorites" },
+  { label: "My Favorites", icon: starIcon, to: "/favorites" },
   { label: "Notifications", icon: notificationsIcon, to: "/notifications" },
 ];
 
