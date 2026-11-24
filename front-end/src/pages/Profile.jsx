@@ -5,7 +5,7 @@ import notificationsIcon from "../assets/notifications-40px-white.svg";
 import settingsIcon from "../assets/settings-40px.svg";
 import logoutIcon from "../assets/logout-40px.svg";
 import supportIcon from "../assets/support-40px.svg";
-import starIcon from "../assets/star-40px.svg";
+import starIcon from "../assets/star-filled-40px-black.svg";
 
 const mockUser = {
   username: "John Doe",
