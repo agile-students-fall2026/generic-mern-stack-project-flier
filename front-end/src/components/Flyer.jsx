@@ -35,7 +35,7 @@ export default function Flyer({ flyer, mode, isFavorite, onToggleFavorite, favor
           </Link>
 
           {/* Gradient overlay to enhance readability & contrast */}
-          <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black via-black/50 to-transparent"/>
+          <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-(--soft-black) via-(--soft-black)/50 to-transparent"/>
           
           {/* Title & Club */}
           <div className="absolute inset-x-0 bottom-0 z-10 p-8 text-(--paper)">

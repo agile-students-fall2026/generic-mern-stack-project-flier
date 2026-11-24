@@ -39,7 +39,7 @@ function MenuRow({ icon, label, to }) {
 
 function MenuCard({ items }) {
   return (
-    <ul className="w-full divide-y divide-(--parchment) overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5">
+    <ul className="w-full divide-y divide-(--parchment) overflow-hidden rounded-2xl bg-(--paper) shadow-sm ring-1 ring-(--soft-black)/5">
       {items.map((item) => (
         <MenuRow key={item.label} icon={item.icon} label={item.label} to={item.to} />
       ))}
@@ -53,7 +53,7 @@ export default function Profile() {
       <div className="flex w-full max-w-md flex-col items-center">
         <img
           src={mockUser.photoUrl}
-          className="size-36 rounded-2xl bg-(--paper) object-cover shadow-md ring-4 ring-white"
+          className="size-36 rounded-2xl bg-(--paper) object-cover shadow-md ring-4 ring-(--paper)"
         />
         <h1 className="heading mt-5 text-center">{mockUser.username}</h1>
         <a
