@@ -1,8 +1,25 @@
 import { useCallback, useEffect, useState } from "react";
 
+function buildFlyersQuery({ category = "", search = "" } = {}) {
+  const params = new URLSearchParams();
+
+  if (category) {
+    params.set("category", category);
+  }
+
+  const trimmedSearch = search.trim();
+  if (trimmedSearch) {
+    params.set("search", trimmedSearch);
+  }
+
+  const query = params.toString();
+  return query ? `?${query}` : "";
+}
+
 export function useFlyers(filter = "") {
   // Shared request state for the current flyer list and any form submission.
   const [currFilter, setFilter] = useState(filter);
+  const [search, setSearch] = useState("");
   const [flyers, setFlyers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [posting, setPosting] = useState(false);
@@ -24,11 +41,10 @@ export function useFlyers(filter = "") {
       loadingTimeout = setTimeout(() => setLoading(true), 300);
       setError("");
 
-      // Read in a category query and apply it if needed
-      const query = currFilter ? `?category=${encodeURIComponent(currFilter)}` : "";
+      const query = buildFlyersQuery({ category: currFilter, search });
 
       try {
-        // Controller lets us cancel if the page unmounts or the category changes before it finishes
+        // Controller lets us cancel if the page unmounts or filters change before it finishes
         const response = await fetch(`/api/flyers${query}`, {
           signal: controller.signal,
         });
@@ -40,7 +56,7 @@ export function useFlyers(filter = "") {
         if (!response.ok || !data.success) {
           throw new Error(data.message || "Could not load flyers.");
         }
-        
+
         setFlyers(data.flyers);
       } catch (fetchError) {
         // Ignore the error if the request was aborted
@@ -59,13 +75,13 @@ export function useFlyers(filter = "") {
     }
 
     fetchFlyers();
-    // Cleanup: ran when component unmounts or before effect runs again 
+    // Cleanup: ran when component unmounts or before effect runs again
     return () => {
       controller.abort();
       clearTimeout(loadingTimeout);
     };
-    // currFilter and refetchIndex trigger the effect to rerun when these values change
-  }, [currFilter, refetchIndex]);
+    // currFilter, search, and refetchIndex trigger the effect to rerun when these values change
+  }, [currFilter, search, refetchIndex]);
 
   // POST a flyer using the backend's flyer fields, then update this list locally.
   const addFlyer = useCallback(async (flyer) => {
@@ -85,8 +101,17 @@ export function useFlyers(filter = "") {
         throw new Error(data.message || "Could not post flyer.");
       }
 
-      // Update local list sorted in starts_at order
-      if (!currFilter || data.flyer.categories?.includes(currFilter)) {
+      const matchesCategory = !currFilter || data.flyer.categories?.includes(currFilter);
+      const searchTerm = search.trim().toLowerCase();
+      const matchesSearch = !searchTerm || [
+        data.flyer.title,
+        data.flyer.description,
+        data.flyer.location,
+        data.flyer.organizationName,
+      ].some((field) => String(field || "").toLowerCase().includes(searchTerm));
+
+      // Update local list sorted in starts_at order when it matches active filters
+      if (matchesCategory && matchesSearch) {
         setFlyers((current) => [...current, data.flyer].sort(
           (a, b) => Date.parse(a.starts_at) - Date.parse(b.starts_at),
         ));
@@ -102,11 +127,13 @@ export function useFlyers(filter = "") {
     } finally {
       setPosting(false);
     }
-  }, [currFilter]);
+  }, [currFilter, search]);
 
   return {
     currFilter,
     setFilter,
+    search,
+    setSearch,
     flyers,
     loading,
     posting,

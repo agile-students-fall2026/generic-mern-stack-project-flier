@@ -33,6 +33,37 @@ describe('Flier API Routes', () => {
       expect(res.body.flyers).to.be.an('array').that.is.not.empty
       expect(res.body.flyers.every(flyer => flyer.categories.includes('Technical'))).to.equal(true)
     })
+
+    it('filters flyers by search term', async () => {
+      const res = await request.execute(app).get('/api/flyers?search=hackathon')
+
+      expect(res).to.have.status(200)
+      expect(res.body.success).to.equal(true)
+      expect(res.body.flyers).to.be.an('array').that.is.not.empty
+      expect(
+        res.body.flyers.every(flyer =>
+          [flyer.title, flyer.description, flyer.location, flyer.organizationName]
+            .some(field => String(field || '').toLowerCase().includes('hackathon'))
+        )
+      ).to.equal(true)
+    })
+
+    it('filters flyers by category and search together', async () => {
+      const res = await request
+        .execute(app)
+        .get('/api/flyers?category=Technical&search=express')
+
+      expect(res).to.have.status(200)
+      expect(res.body.success).to.equal(true)
+      expect(res.body.flyers).to.be.an('array').that.is.not.empty
+      expect(res.body.flyers.every(flyer => flyer.categories.includes('Technical'))).to.equal(true)
+      expect(
+        res.body.flyers.every(flyer =>
+          [flyer.title, flyer.description, flyer.location, flyer.organizationName]
+            .some(field => String(field || '').toLowerCase().includes('express'))
+        )
+      ).to.equal(true)
+    })
   })
 
   describe('POST /api/flyers', () => {

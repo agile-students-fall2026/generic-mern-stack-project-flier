@@ -5,9 +5,9 @@ import CustomDropdown from "./CustomDropdown";
 import DateTimeFields from "./DateTimeFields";
 import FlyerFileUpload from "./FlyerFileUpload";
 import { localDateTimeToIso } from "../utils/flyerDate";
+import { FLYER_CATEGORIES } from "../constants/flyerCategories";
 
 /* Used for data entry validation & restrictions */
-const CATEGORIES = ["Technical", "Creative", "Networking", "Cultural", "Music", "Food", "Merch"];
 const LOCATION_OPTIONS = [
   "Kimmel Center",
   "Bobst Library",
@@ -103,7 +103,7 @@ export default function AddFlyerForm({ organizations = [], onSubmit, mode = "add
         <CustomDropdown
           fieldLabel="Categories* (choose one or more)"
           label="Choose flyer categories"
-          options={CATEGORIES.map((category) => ({ value: category, label: category }))}
+          options={FLYER_CATEGORIES.map((category) => ({ value: category, label: category }))}
           value={inputs.categories}
           onChange={(value) => setField("categories", value)}
           placeholder="Choose categories"
