@@ -18,6 +18,10 @@ const organizations = JSON.parse(
   fs.readFileSync(path.join(__dirname, 'data', 'organizations.json'), 'utf8')
 )
 
+const users = JSON.parse(
+  fs.readFileSync(path.join(__dirname, 'data', 'users.json'), 'utf8')
+)
+
 const flyers = JSON.parse(
   fs.readFileSync(path.join(__dirname, 'data', 'flyers.json'), 'utf8')
 )
@@ -73,6 +77,10 @@ function findFlyerIndex(id) {
 
 function findOrganization(id) {
   return organizations.find(o => String(o.id) === String(id))
+}
+
+function findUser(id) {
+  return users.find(user => String(user.id) === String(id))
 }
 
 // Keep each organization's flyer id list in sync when a flyer changes clubs.
@@ -266,6 +274,79 @@ app.get('/api/organizations/:id', (req, res) => {
     return res.status(200).json({ success: true, organization })
   } catch (err) {
     console.error('GET /api/organizations/:id failed:', err)
+    return res.status(500).json({ success: false, message: 'Something went wrong.' })
+  }
+})
+
+app.get('/api/users/:userId/favorites', (req, res) => {
+  try {
+    const { userId } = req.params
+
+    // TODO: Replace in Sprint 3 with proper database query
+    const user = findUser(userId)
+    if (!user) {
+      return res.status(404).json({ success: false, message: `User #${userId} not found.` })
+    }
+
+    const favoriteOrganizationIds = user.favoriteOrganizationIds
+    const favoriteOrganizations = favoriteOrganizationIds
+      .map(findOrganization)
+      .filter(Boolean)
+
+    return res.status(200).json({
+      success: true,
+      favoriteOrganizationIds,
+      organizations: favoriteOrganizations,
+    })
+  } catch (err) {
+    console.error('GET /api/users/:userId/favorites failed:', err)
+    return res.status(500).json({ success: false, message: 'Something went wrong.' })
+  }
+})
+
+app.post('/api/users/:userId/favorites/:orgId', (req, res) => {
+  try {
+    const { userId, orgId } = req.params
+
+    // TODO: Replace in Sprint 3 with proper database query
+    const user = findUser(userId)
+    if (!user) {
+      return res.status(404).json({ success: false, message: `User #${userId} not found.` })
+    }
+
+    const organization = findOrganization(orgId)
+    if (!organization) {
+      return res.status(404).json({ success: false, message: `Organization #${orgId} not found.` })
+    }
+
+    const favoriteOrganizationId = String(orgId)
+    if (!user.favoriteOrganizationIds.some(id => String(id) === favoriteOrganizationId)) {
+      user.favoriteOrganizationIds.push(favoriteOrganizationId)
+    }
+
+    return res.status(200).json({ success: true, favoriteOrganizationIds: user.favoriteOrganizationIds })
+  } catch (err) {
+    console.error('POST /api/users/:userId/favorites/:orgId failed:', err)
+    return res.status(500).json({ success: false, message: 'Something went wrong.' })
+  }
+})
+
+app.delete('/api/users/:userId/favorites/:orgId', (req, res) => {
+  try {
+    const { userId, orgId } = req.params
+
+    // TODO: Replace in Sprint 3 with proper database query
+    const user = findUser(userId)
+    if (!user) {
+      return res.status(404).json({ success: false, message: `User #${userId} not found.` })
+    }
+
+    user.favoriteOrganizationIds = user.favoriteOrganizationIds
+      .filter(id => String(id) !== String(orgId))
+
+    return res.status(200).json({ success: true, favoriteOrganizationIds: user.favoriteOrganizationIds })
+  } catch (err) {
+    console.error('DELETE /api/users/:userId/favorites/:orgId failed:', err)
     return res.status(500).json({ success: false, message: 'Something went wrong.' })
   }
 })
