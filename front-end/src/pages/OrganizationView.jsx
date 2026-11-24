@@ -3,9 +3,15 @@ import ClubCard from "../components/ClubCard";
 import { useOrgs } from "../hooks/useOrgs";
 import searchIcon from "../assets/search-40px-black.svg";
 import { EmptyState, ErrorState, LoadingState } from "../components/LoadingState";
+import { useFavorites } from "../hooks/useFavorites";
 
 export default function OrganizationView() {
   const { organizations, loading, error: loadError } = useOrgs();
+  const {
+    isFavorite,
+    toggleFavorite,
+    error: favoritesError,
+  } = useFavorites();
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const searchTerm = query.trim().toLowerCase();
@@ -51,6 +57,10 @@ export default function OrganizationView() {
           />
         ) : null}
 
+        {favoritesError ? (
+          <p role="alert" className="body-copy mt-4">{favoritesError}</p>
+        ) : null}
+
         {loading ? (
           <LoadingState label="Loading organizations…" className="mt-4" />
         ) : loadError ? (
@@ -60,7 +70,12 @@ export default function OrganizationView() {
         ) : (
           <ul className="mt-4 flex flex-col gap-3">
             {shownOrganizations.map((organization) => (
-              <ClubCard key={organization.id} club={organization} />
+              <ClubCard
+                key={organization.id}
+                club={organization}
+                isFavorite={isFavorite(organization.id)}
+                onToggleFavorite={() => toggleFavorite(organization.id)}
+              />
             ))}
           </ul>
         )}

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
+import FavoriteButton from "./FavoriteButton";
 
-export default function ClubCard({ club }) {
+export default function ClubCard({ club, isFavorite, onToggleFavorite }) {
   const detailsPath = `/organizations/${club.id}`;
 
   return (
@@ -20,6 +21,14 @@ export default function ClubCard({ club }) {
           {club.description}
         </Link>
       </div>
+      {onToggleFavorite ? (
+        <FavoriteButton
+          isFavorite={isFavorite}
+          onToggle={onToggleFavorite}
+          orgName={club.name}
+          className="ml-auto"
+        />
+      ) : null}
     </li>
   );
 }
