@@ -1,6 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import Flyer from "../components/Flyer";
 import { useFlyer } from "../hooks/useFlyer";
+import { EmptyState, ErrorState, LoadingState } from "../components/LoadingState";
 
 export default function FlyerDetails() {
   /* Grab the id from the URL params */
@@ -11,7 +12,7 @@ export default function FlyerDetails() {
     return (
       <section className="flex flex-1 flex-col bg-(--parchment) p-8 text-(--soft-black)">
         <div className="mx-auto flex w-full max-w-md flex-col gap-4">
-          <p className="body-copy">{loading ? "Loading flyer…" : error || "This flyer was not found."}</p>
+          {loading ? <LoadingState label="Loading flyer…" /> : error ? <ErrorState>{error}</ErrorState> : <EmptyState><p className="body-copy">This flyer was not found.</p></EmptyState>}
           <Link to="/home" className="body-copy underline underline-offset-4">Back to Main Feed</Link>
         </div>
       </section>
