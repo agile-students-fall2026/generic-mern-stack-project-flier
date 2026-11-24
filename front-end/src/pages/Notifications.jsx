@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import arrowBack from "../assets/arrow-back-40px.svg";
+import { EmptyState } from "../components/LoadingState";
 
 export default function Notifications() {
   const navigate = useNavigate();
@@ -66,7 +67,7 @@ export default function Notifications() {
         </div>
 
         {notifications.length === 0 ? (
-          <div className="mt-6 rounded-2xl p-8 text-center">
+          <EmptyState className="mt-6">
             <p className="body-copy">No notifications.</p>
             <Link
               to="/organizations"
@@ -74,7 +75,7 @@ export default function Notifications() {
             >
               Back to organizations
             </Link>
-          </div>
+          </EmptyState>
         ) : (
           <div className="mt-6 flex flex-col gap-3 text-(--soft-black)">
             {notifications.map((item) => (

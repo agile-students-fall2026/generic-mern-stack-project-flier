@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import arrowBack from "../assets/arrow-back-40px.svg";
 import { useOrgs } from "../hooks/useOrgs";
+import { EmptyState, ErrorState, LoadingState } from "../components/LoadingState";
 
 function ClubDetailPanel({ club }) {
   const [adminRequested, setAdminRequested] = useState(false);
@@ -36,6 +37,7 @@ function ClubDetailPanel({ club }) {
 
         <div className="mt-8 flex min-h-72 w-full flex-1 flex-col bg-white px-6 py-6">
           <p className="body-copy">{club.description}</p>
+          {Array.isArray(club.flyers) && club.flyers.length === 0 && <EmptyState className="mt-6"><p className="body-copy">This organization has not posted any flyers yet.</p></EmptyState>}
           <div className="mt-auto flex flex-col items-start gap-4 pt-10">
             <button
               type="button"
@@ -60,9 +62,7 @@ export default function ClubDetails() {
     return (
       <section className="flex flex-1 flex-col bg-(--parchment) px-5 pt-8 pb-10 text-(--soft-black)">
         <div className="mx-auto flex w-full max-w-md flex-col gap-4">
-          <p className="body-copy">
-            {loading ? "Loading organization…" : error || "This organization was not found."}
-          </p>
+          {loading ? <LoadingState label="Loading organization…" /> : error ? <ErrorState>{error}</ErrorState> : <EmptyState><p className="body-copy">This organization was not found.</p></EmptyState>}
           <Link to="/organizations" className="body-copy underline underline-offset-4">
             Back to organization list
           </Link>

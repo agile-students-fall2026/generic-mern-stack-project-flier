@@ -1,5 +1,6 @@
 import Flyer from "./Flyer";
 import { getFlyersBySection } from "../utils/flyerUtils";
+import { EmptyState, ErrorState, LoadingState } from "./LoadingState";
 
 /**
  * Maps a given prop passed to the component to its proper heading.
@@ -13,7 +14,7 @@ const CategoryLookup = {
 };
 
 export default function FlyerCarousel({ category, flyers = [], loading, error }) {
-  const sectionFlyers = getFlyersBySection(category, flyers);
+  const sectionFlyers = getFlyersBySection(category, Array.isArray(flyers) ? flyers : []);
 
   return (
     <section className="flex justify-center items-center flex-col h-fit gap-2">
@@ -22,26 +23,21 @@ export default function FlyerCarousel({ category, flyers = [], loading, error })
         <h1 className="heading w-full text-start text-(--soft-black)">{CategoryLookup[category]}</h1>
       )}
 
-      <div className="flex w-full gap-2">
-        {loading && <p className="body-copy">Loading flyers...</p>}
-
-        {!loading && error && (
-          <p className="body-copy">{error}</p>
-        )}
-        
-        {!loading && !error && sectionFlyers.length === 0 && (
+      {loading ? <LoadingState label="Loading flyers…" className="w-full" /> : error ? (
+        <ErrorState className="w-full">{error}</ErrorState>
+      ) : sectionFlyers.length === 0 ? (
+        <EmptyState className="w-full">
           <p className="body-copy">
             {category === "calendar"
               ? "No events have been registered for this day."
               : "No flyers in this section yet."}
           </p>
-        )}
-      </div>
-      <div className="flex gap-3 overflow-x-auto w-full">
+        </EmptyState>
+      ) : <div className="flex gap-3 overflow-x-auto w-full">
         {sectionFlyers.map((flyer) => (
           <Flyer key={flyer.id} flyer={flyer} mode="carousel"/>
         ))}
-      </div>
+      </div>}
     </section>
   );
 }

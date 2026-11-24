@@ -2,14 +2,15 @@ import { useState } from "react";
 import ClubCard from "../components/ClubCard";
 import { useOrgs } from "../hooks/useOrgs";
 import searchIcon from "../assets/search-40px-black.svg";
+import { EmptyState, ErrorState, LoadingState } from "../components/LoadingState";
 
 export default function OrganizationView() {
   const { organizations, loading, error: loadError } = useOrgs();
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const searchTerm = query.trim().toLowerCase();
-  const shownOrganizations = organizations.filter((organization) => {
-    return organization.name.toLowerCase().includes(searchTerm);
+  const shownOrganizations = (Array.isArray(organizations) ? organizations : []).filter((organization) => {
+    return (organization?.name || "").toLowerCase().includes(searchTerm);
   });
 
   function toggleSearch() {
@@ -51,11 +52,11 @@ export default function OrganizationView() {
         ) : null}
 
         {loading ? (
-          <p className="body-copy mt-4">Loading organizations…</p>
+          <LoadingState label="Loading organizations…" className="mt-4" />
         ) : loadError ? (
-          <p role="alert" className="body-copy mt-4">{loadError}</p>
+          <ErrorState className="mt-4">{loadError}</ErrorState>
         ) : shownOrganizations.length === 0 ? (
-          <p className="body-copy mt-4">No clubs match that name.</p>
+          <EmptyState className="mt-4"><p className="body-copy">{searchTerm ? "No clubs match that name." : "No organizations are available yet."}</p></EmptyState>
         ) : (
           <ul className="mt-4 flex flex-col gap-3">
             {shownOrganizations.map((organization) => (
