@@ -14,11 +14,11 @@ export default function Register() {
 
   return (
     <div className="flex min-h-screen flex-col bg-(--paper) text-(--soft-black)">
-      <div className="flex justify-center py-4">
-        <img src={flierLogoTitle} alt="Flier logo" className="w-48"/>
+      <div className="flex justify-center">
+        <img src={flierLogoTitle} alt="Flier logo" className="h-24 w-54"/>
       </div>
 
-      <div className="flex flex-1 flex-col items-center rounded-t-4xl bg-(--parchment) inset-shadow-sm shadow-[0px_-3px_8px_rgba(0,0,0,0.25)] p-8">
+      <div className="flex flex-1 flex-col items-center rounded-t-4xl bg-(--parchment) inset-shadow-sm shadow-[0px_-3px_8px_rgba(0,0,0,0.25)] p-8 mt-3">
         <div className="flex w-full flex-1 flex-col justify-between">
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">

@@ -4,7 +4,7 @@ import AddFlyerForm from "../components/AddFlyerForm";
 import { useFlyers } from "../hooks/useFlyers";
 import { useOrgs } from "../hooks/useOrgs";
 
-const primaryButton = "feature-copy flex h-fit w-full p-6 items-center justify-center rounded-xl border border-black/10 bg-white text-base font-semibold shadow-sm active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-(--nyu-indigo)";
+const primaryButton = "feature-copy flex h-fit w-full p-6 items-center justify-center rounded-xl border border-(--soft-black)/10 bg-(--paper) text-base font-semibold shadow-sm active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-(--nyu-indigo)";
 
 function NotAnAdmin() {
   return (
