@@ -17,11 +17,11 @@ export default function Login() {
 
   return (
     <div className="flex min-h-screen flex-col bg-(--paper) text-(--soft-black)">
-      <div className="flex justify-center py-4">
-        <img src={flierLogoTitle} alt="Flier logo" className="w-48" />
+      <div className="flex justify-center">
+        <img src={flierLogoTitle} alt="Flier logo" className="w-54 h-24" />
       </div>
 
-      <div className="flex flex-1 flex-col items-center rounded-t-4xl bg-(--parchment) p-8 inset-shadow-sm shadow-[0px_-3px_8px_rgba(0,0,0,0.25)]">
+      <div className="flex flex-1 flex-col items-center rounded-t-4xl bg-(--parchment) p-8 inset-shadow-sm shadow-[0px_-3px_8px_rgba(0,0,0,0.25)] mt-3">
         <div className="flex w-full flex-1 flex-col justify-between">
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">

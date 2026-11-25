@@ -17,17 +17,17 @@ export default function Settings() {
         </div>
 
         <div className="mt-8 flex flex-col gap-3">
-          <div className="flex items-center justify-between bg-white p-4">
+          <div className="flex items-center justify-between bg-(--paper) p-4">
             <span className="body-copy">Notifications</span>
             <input type="checkbox" defaultChecked />
           </div>
 
-          <div className="flex items-center justify-between bg-white p-4">
+          <div className="flex items-center justify-between bg-(--paper) p-4">
             <span className="body-copy">Dark Mode</span>
             <input type="checkbox" />
           </div>
 
-          <div className="bg-white p-4">
+          <div className="bg-(--paper) p-4">
             <button
               type="button"
               className="body-copy underline underline-offset-4 text-red-600"

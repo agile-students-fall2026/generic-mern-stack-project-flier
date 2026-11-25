@@ -18,7 +18,7 @@ export default function Support() {
 
         <p className="body-copy mt-2">Need help? Let us know.</p>
 
-        <div className="mt-8 flex flex-col gap-4 bg-white p-6">
+        <div className="mt-8 flex flex-col gap-4 bg-(--paper) p-6">
           <div>
             <p className="body-copy">Email us</p>
             <a

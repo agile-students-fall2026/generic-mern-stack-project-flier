@@ -8,7 +8,7 @@ export function LoadingState({ label = "Loading…", className = "" }) {
 }
 
 export function EmptyState({ children, className = "" }) {
-  return <div className={`rounded-2xl bg-(--paper) px-4 py-8 text-center shadow-md inset-shadow-sm ${className}`}>{children}</div>;
+  return <div className={`rounded-2xl bg-(--paper) px-4 py-8 text-center text-(--soft-black) shadow-md inset-shadow-sm ${className}`}>{children}</div>;
 }
 
 export function ErrorState({ children, className = "" }) {

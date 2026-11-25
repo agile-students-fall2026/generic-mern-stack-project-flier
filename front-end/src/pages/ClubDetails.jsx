@@ -50,7 +50,7 @@ function ClubDetailPanel({ club }) {
           {club.email}
         </a>
 
-        <div className="mt-8 flex min-h-72 w-full flex-1 flex-col bg-white px-6 py-6">
+        <div className="mt-8 flex min-h-72 w-full flex-1 flex-col bg-(--paper) px-6 py-6">
           <p className="body-copy">{club.description}</p>
           {Array.isArray(club.flyers) && club.flyers.length === 0 && <EmptyState className="mt-6"><p className="body-copy">This organization has not posted any flyers yet.</p></EmptyState>}
           <div className="mt-auto flex flex-col items-start gap-4 pt-10">

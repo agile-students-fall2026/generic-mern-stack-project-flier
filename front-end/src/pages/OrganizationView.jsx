@@ -53,7 +53,7 @@ export default function OrganizationView() {
             aria-label="Search clubs by name"
             autoComplete="off"
             autoFocus
-            className="body-copy mt-4 w-full rounded-xl border border-black/10 bg-(--paper) px-4 py-3 outline-none focus-visible:ring-2 focus-visible:ring-(--nyu-indigo)"
+            className="body-copy mt-4 w-full rounded-xl border border-(--soft-black)/10 bg-(--paper) px-4 py-3 outline-none focus-visible:ring-2 focus-visible:ring-(--nyu-indigo)"
           />
         ) : null}
 
