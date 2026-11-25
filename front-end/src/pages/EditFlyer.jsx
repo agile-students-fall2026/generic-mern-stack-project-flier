@@ -22,7 +22,8 @@ function EditFlyerPanel({ flyer, updateFlyer }) {
       }
       image = uploadData.url;
     }
-    const { imageFile, ...updates } = values;
+    const updates = { ...values };
+    delete updates.imageFile;
     await updateFlyer({ ...updates, image });
     setNotice("Changes saved");
   }

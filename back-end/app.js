@@ -28,7 +28,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/static', express.static('public'));
+app.use('/static', express.static(path.join(__dirname, 'public')));
 
 // flyer image uploads (Multer)
 app.use('/api/uploads', uploadRoutes);
