@@ -45,7 +45,8 @@ export default function AddFlyer() {
       throw new Error(uploadData.error || "Could not upload flyer file.");
     }
 
-    const { imageFile, ...flyer } = values;
+    const flyer = { ...values };
+    delete flyer.imageFile;
     const createdFlyer = await addFlyer({ ...flyer, image: uploadData.url });
     navigate(`/flyer/${createdFlyer.id}`);
   }

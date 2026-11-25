@@ -37,14 +37,21 @@ export function useFlyer(id) {
       }
     } finally {
       // Do not update state after this request has been cancelled.
-      if (!signal?.aborted) setLoading(false);
+      if (!signal?.aborted) {
+        setLoading(false);
+      }
     }
   }, [id]);
 
   useEffect(() => {
     // Cancel the previous request when the ID changes or the page unmounts.
     const controller = new AbortController();
-    fetchFlyer(controller.signal);
+    // Defer request state updates until after the effect has finished running.
+    Promise.resolve().then(() => {
+      if (!controller.signal.aborted) {
+        fetchFlyer(controller.signal);
+      }
+    });
     return () => controller.abort();
   }, [fetchFlyer]);
 

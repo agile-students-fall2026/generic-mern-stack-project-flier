@@ -15,6 +15,10 @@ export default defineConfig({
         target: backendAPI,
         changeOrigin: true,
       },
+      "/static": {
+        target: backendAPI,
+        changeOrigin: true,
+      },
     }
   }
 });
